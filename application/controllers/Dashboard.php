@@ -5,7 +5,7 @@ class Dashboard extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        // Load User_model here
+
         $this->load->model('User_model'); 
 
         // Pastikan user sudah login
@@ -52,7 +52,7 @@ class Dashboard extends CI_Controller {
     }
 
     public function save() {
-        // Handle AJAX request for adding new user
+
         $username = $this->input->post('username');
         $password = $this->input->post('password');
 
@@ -77,7 +77,7 @@ class Dashboard extends CI_Controller {
     }
 
     public function edit($id = null) {
-        // Handle AJAX request for fetching user data
+
         $q = $this->User_model->getUserByID($id);
         $user = $q->row();
     
@@ -104,7 +104,7 @@ class Dashboard extends CI_Controller {
     }
 
     public function update_user() {
-        // Handle AJAX request for updating user data
+
         $id = $this->input->post('id');
         $username = $this->input->post('username');
         $password = $this->input->post('password');
@@ -139,7 +139,7 @@ class Dashboard extends CI_Controller {
     }
 
     public function delete($id = null) {
-        // Handle AJAX request for deleting user
+
         // Pastikan user yang sedang login tidak dapat menghapus dirinya sendiri
         if ($id == $this->session->userdata('user_id')) {
             echo json_encode([

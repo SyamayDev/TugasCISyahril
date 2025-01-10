@@ -40,14 +40,12 @@ $(document).ready(function () {
     $('#loginForm').submit(function (event) {
         event.preventDefault();
 
-        // Reset error messages
         $('#usernameError').text('');
         $('#passwordError').text('');
 
         const username = $('#username').val();
         const password = $('#password').val();
 
-        // Validate empty fields
         if (!username || !password) {
             if (!username) {
                 $('#usernameError').text('Username harus diisi');
@@ -58,7 +56,6 @@ $(document).ready(function () {
             return;
         }
 
-        // Send AJAX request for login
         $.ajax({
             url: '<?= base_url('index.php/login/proses_login') ?>',
             type: 'POST',
@@ -66,7 +63,6 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 if (response.status) {
-                    // If login is successful, show success message
                     Swal.fire({
                         title: 'Berhasil!',
                         text: response.message,
@@ -74,11 +70,10 @@ $(document).ready(function () {
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        // Redirect to dashboard
                         window.location.href = response.redirect_url;
                     });
                 } else {
-                    // If login fails, show error message
+
                     Swal.fire({
                         title: 'Gagal!',
                         text: response.message,
@@ -86,7 +81,6 @@ $(document).ready(function () {
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        // Redirect to login page on failure
                         window.location.href = response.redirect_url;
                     });
                 }
