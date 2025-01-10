@@ -3,82 +3,164 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends CI_Controller {
 
-    public function __construct() 
-    {
+    public function __construct() {
         parent::__construct();
-        $this->load->model('User_model');
-    }
+        // Load User_model here
+        $this->load->model('User_model'); 
+
+        // Pastikan user sudah login
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+        }
+    }    
 
     public function index() {
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+        }
+    
         $q = $this->User_model->getUserAll();
+        $current_user = $this->session->userdata('user_id');
+        
+        // Ambil semua pengguna
         $data['users'] = $q->result();
-
+    
+        // Menampilkan nama user yang sedang login di halaman dashboard
+        $data['current_user'] = $this->session->userdata('username');
+    
         $this->load->view('view_dashboard', $data);
     }
+    
 
-
-    public function add() {
-        $this->load->view('view_add_user');
-    }
-
-    public function save() {
-        $data['username'] = $this->input->post('username');
-        $data['password'] = $this->input->post('password');
-
-        $insert = $this->User_model->insertUser($data);
-
-        if($insert) {
-            redirect('dashboard', 'refresh');
+    public function check_username() {
+        $username = $this->input->post('username');
+        $user_id = $this->input->post('id'); // Untuk edit, kita butuh user id
+    
+        $is_existing = $this->User_model->isUsernameExist($username, $user_id);
+    
+        if ($is_existing) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Username sudah digunakan.'
+            ]);
         } else {
-            $this->session->set_flashdata('insert_error', 'Data gagal Disimpan');
-            $this->load->view('view_add_user', $data);
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Username tersedia.'
+            ]);
         }
     }
 
+    public function save() {
+        // Handle AJAX request for adding new user
+        $username = $this->input->post('username');
+        $password = $this->input->post('password');
 
-	public function edit($id = null)
-	{
-		$q = $this->User_model->getUserByID($id);
-		$data['user'] = $q->row();
+        $data = [
+            'username' => $username,
+            'password' => $password
+        ];
 
-		$this->load->view('view_edit_user', $data);
-	}
+        $insert = $this->User_model->insertUser($data);
 
-	public function update_user()
-	{
-		$id = $this->input->post('id');
-		$username = $this->input->post('username');
-		$password = $this->input->post('password');
+        if ($insert) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'User added successfully!'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to add user.'
+            ]);
+        }
+    }
 
-		$data = array(
-			'username' => $username,
-			'password' => $password
-		);
+    public function edit($id = null) {
+        // Handle AJAX request for fetching user data
+        $q = $this->User_model->getUserByID($id);
+        $user = $q->row();
+    
+        if ($user) {
+            // Pastikan user yang sedang login tidak dapat mengedit dirinya sendiri
+            if ($user->id == $this->session->userdata('user_id')) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Tidak dapat mengedit data diri sendiri.'
+                ]);
+                return;
+            }
 
-		$update = $this->User_model->updateUser($id, $data);
+            echo json_encode([
+                'status' => 'success',
+                'data' => $user
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'User not found.'
+            ]);
+        }
+    }
 
-		if ($update) {
-			redirect('dashboard', 'refresh');
-		} else {
-			$this->session->set_flashdata('update_error', 'Data gagal diupdate');
-			redirect('dashboard/edit/' . $id, 'refresh');
-		}
-	}
+    public function update_user() {
+        // Handle AJAX request for updating user data
+        $id = $this->input->post('id');
+        $username = $this->input->post('username');
+        $password = $this->input->post('password');
+
+        // Pastikan user yang sedang login tidak dapat mengupdate dirinya sendiri
+        if ($id == $this->session->userdata('user_id')) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Tidak dapat mengupdate data diri sendiri.'
+            ]);
+            return;
+        }
+
+        $data = [
+            'username' => $username,
+            'password' => $password
+        ];
+
+        $update = $this->User_model->updateUser($id, $data);
+
+        if ($update) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'User updated successfully!'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to update user.'
+            ]);
+        }
+    }
 
     public function delete($id = null) {
-        $this->User_model->deleteUser($id);
-        redirect('dashboard', 'refresh');
+        // Handle AJAX request for deleting user
+        // Pastikan user yang sedang login tidak dapat menghapus dirinya sendiri
+        if ($id == $this->session->userdata('user_id')) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Tidak dapat menghapus data diri sendiri.'
+            ]);
+            return;
+        }
+
+        $delete = $this->User_model->deleteUser($id);
+
+        if ($delete) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'User deleted successfully!'
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to delete user.'
+            ]);
+        }
     }
-
-
-
-        // if($q->num_rows() > 0) {
-        //     foreach ($q->result() as $row) 
-        //     {
-        //         echo 'nama = ' . $row->username . "<br>";
-        //         echo 'password = ' . $row->password . "<br><br>";
-        //     }
-        // } else {
-        //     echo "<h1>Kosong Banget</h1>";
-        // }
-    }
+}
