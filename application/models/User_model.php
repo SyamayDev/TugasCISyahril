@@ -49,7 +49,6 @@ class User_model extends CI_Model {
     }
     
     
-
     public function deleteUser($id) {
         $current_user = $this->session->userdata('user_id');
         if ($id == $current_user) {

@@ -5,15 +5,16 @@ class Dashboard extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-
-        $this->load->model('User_model'); 
-
-        // Pastikan user sudah login
+        
+        // Memastikan model User_model diload dengan benar
+        $this->load->model('User_model');
+        
         if (!$this->session->userdata('user_id')) {
+            $this->session->set_flashdata('alert', 'not_logged_in');
             redirect('login');
         }
-    }    
-
+    }
+    
     public function index() {
         if (!$this->session->userdata('user_id')) {
             redirect('login');
@@ -22,10 +23,8 @@ class Dashboard extends CI_Controller {
         $q = $this->User_model->getUserAll();
         $current_user = $this->session->userdata('user_id');
         
-        // Ambil semua pengguna
         $data['users'] = $q->result();
     
-        // Menampilkan nama user yang sedang login di halaman dashboard
         $data['current_user'] = $this->session->userdata('username');
     
         $this->load->view('view_dashboard', $data);
@@ -34,7 +33,7 @@ class Dashboard extends CI_Controller {
 
     public function check_username() {
         $username = $this->input->post('username');
-        $user_id = $this->input->post('id'); // Untuk edit, kita butuh user id
+        $user_id = $this->input->post('id');
     
         $is_existing = $this->User_model->isUsernameExist($username, $user_id);
     
@@ -82,7 +81,7 @@ class Dashboard extends CI_Controller {
         $user = $q->row();
     
         if ($user) {
-            // Pastikan user yang sedang login tidak dapat mengedit dirinya sendiri
+
             if ($user->id == $this->session->userdata('user_id')) {
                 echo json_encode([
                     'status' => 'error',
@@ -109,7 +108,6 @@ class Dashboard extends CI_Controller {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
 
-        // Pastikan user yang sedang login tidak dapat mengupdate dirinya sendiri
         if ($id == $this->session->userdata('user_id')) {
             echo json_encode([
                 'status' => 'error',
@@ -140,7 +138,6 @@ class Dashboard extends CI_Controller {
 
     public function delete($id = null) {
 
-        // Pastikan user yang sedang login tidak dapat menghapus dirinya sendiri
         if ($id == $this->session->userdata('user_id')) {
             echo json_encode([
                 'status' => 'error',

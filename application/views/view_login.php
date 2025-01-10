@@ -73,7 +73,6 @@ $(document).ready(function () {
                         window.location.href = response.redirect_url;
                     });
                 } else {
-
                     Swal.fire({
                         title: 'Gagal!',
                         text: response.message,
@@ -87,6 +86,16 @@ $(document).ready(function () {
             }
         });
     });
+
+    <?php if ($this->session->flashdata('alert') === 'not_logged_in'): ?>
+        Swal.fire({
+            title: 'Peringatan!',
+            text: 'Anda harus login terlebih dahulu untuk mengakses dashboard.',
+            icon: 'warning',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    <?php endif; ?>
 });
 </script>
 </body>
