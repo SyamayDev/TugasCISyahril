@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="container mt-4">
-    <!-- Header Dashboard -->
+    <!-- Ini Header Dashboard -->
     <div class="row align-items-center mb-4">
         <div class="col-md-6">
             <h1 class="display-4">Dashboard</h1>
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <!-- Card Kontrol -->
+    <!-- Ini Card Kontrol -->
     <div class="row justify-content-center">
         <div class="card col-md-10">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <!-- Tabel User -->
+                <!-- Ini Tabel User -->
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered">
                         <thead class="thead-dark">
