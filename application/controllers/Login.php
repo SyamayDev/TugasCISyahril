@@ -16,7 +16,6 @@ class Login extends CI_Controller {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
         
-
         $user = $this->User_model->validateUser($username, $password);
     
         if ($user) {
@@ -26,7 +25,7 @@ class Login extends CI_Controller {
             echo json_encode([
                 'status' => true,
                 'message' => 'Login berhasil',
-                'redirect_url' => base_url('dashboard') 
+                'redirect_url' => base_url('admin')
             ]);
         } else {
             echo json_encode([
@@ -36,6 +35,7 @@ class Login extends CI_Controller {
             ]);
         }
     }
+    
     
     
     public function logout() {

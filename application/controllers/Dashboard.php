@@ -6,7 +6,6 @@ class Dashboard extends CI_Controller {
     public function __construct() {
         parent::__construct();
         
-        // Memastikan model User_model diload dengan benar
         $this->load->model('User_model');
         
         if (!$this->session->userdata('user_id')) {
@@ -16,6 +15,12 @@ class Dashboard extends CI_Controller {
     }
     
     public function index() {
+            $data = [
+                'menu' => 'backend/menu',
+                'content' => 'view_dashboard',
+                'title' => 'Admin'
+            ];
+
         if (!$this->session->userdata('user_id')) {
             redirect('login');
         }
@@ -26,8 +31,8 @@ class Dashboard extends CI_Controller {
         $data['users'] = $q->result();
     
         $data['current_user'] = $this->session->userdata('username');
-    
-        $this->load->view('view_dashboard', $data);
+
+        $this->load->view('template', $data);
     }
     
 

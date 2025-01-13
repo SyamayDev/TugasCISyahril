@@ -58,6 +58,7 @@ $route['datang'] = 'welcome/selamat';
 $route['login/proses_login'] = 'login/proses_login';
 
 
+
 // $route = array(
 //     'default_controller' => 'welcome',
 //     '404_override' => '',
