@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 16 Jan 2025 pada 15.48
+-- Waktu pembuatan: 16 Jan 2025 pada 16.49
 -- Versi server: 8.0.30
 -- Versi PHP: 7.4.33
 
@@ -120,11 +120,7 @@ CREATE TABLE `harga_biaya` (
 --
 
 INSERT INTO `harga_biaya` (`id`, `tahun_pelajaran_id`, `jenis_biaya_id`, `harga_biaya`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(5, 1, 13, 3600000.00, '2025-01-16 06:39:16', '2025-01-16 06:49:59', 0),
-(6, 1, 12, 460000.00, '2025-01-16 06:49:43', '2025-01-16 06:49:43', 0),
-(7, 2, 13, 560000.00, '2025-01-16 13:38:05', '2025-01-16 20:38:27', 1737034707),
-(8, 0, 0, 60000.00, '2025-01-16 13:49:32', '2025-01-16 20:49:36', 1737035376),
-(9, 1, 12, 300000.00, '2025-01-16 13:51:44', '2025-01-16 21:43:30', 1737038610);
+(10, 2, 13, 4000000.00, '2025-01-16 16:38:56', '2025-01-16 16:38:56', 0);
 
 -- --------------------------------------------------------
 
@@ -168,7 +164,9 @@ CREATE TABLE `jenis_seragam` (
 --
 
 INSERT INTO `jenis_seragam` (`id`, `nama_jenis_seragam`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Seragam Putih Abu-abu', '2025-01-16 08:52:12', '2025-01-16 13:17:15', 0);
+(1, 'Seragam Putih Abu-abu', '2025-01-16 08:52:12', '2025-01-16 13:17:15', 0),
+(4, 'Seragam Batik', '2025-01-16 15:54:10', '2025-01-16 15:54:10', 0),
+(5, 'Seragam Prakerin', '2025-01-16 15:54:32', '2025-01-16 15:54:32', 0);
 
 -- --------------------------------------------------------
 
@@ -191,7 +189,6 @@ CREATE TABLE `stok_seragam` (
 --
 
 INSERT INTO `stok_seragam` (`id`, `jenis_seragam_id`, `ukuran_seragam`, `stok_seragam`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 'M', '110', '2025-01-16 13:13:06', '2025-01-16 13:15:31', 1737033368),
 (2, 1, 'M', '90', '2025-01-16 13:16:22', '2025-01-16 13:16:22', 0),
 (3, 1, 'L', '130', '2025-01-16 15:16:18', '2025-01-16 15:16:18', 0);
 
@@ -296,7 +293,7 @@ ALTER TABLE `data_tahun_pelajaran`
 -- AUTO_INCREMENT untuk tabel `harga_biaya`
 --
 ALTER TABLE `harga_biaya`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `jenis_biaya`
@@ -308,7 +305,7 @@ ALTER TABLE `jenis_biaya`
 -- AUTO_INCREMENT untuk tabel `jenis_seragam`
 --
 ALTER TABLE `jenis_seragam`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `stok_seragam`

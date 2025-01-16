@@ -174,8 +174,15 @@
 	});
 
 	$('.btnTambahJenisBiaya').on('click', function() {
+		resetFormJenisBiaya();
 		$('#modalJenisBiaya').modal('show');
 	});
+
+	function resetFormJenisBiaya() {
+		$('#id').val('');
+		$('#nama_jenis_biaya').val('');
+		$('#status_jenis_biaya').val('');
+	}
 
 	function tabelJenisBiaya() {
 		let tabel = $('#tableJenisBiaya');
@@ -276,8 +283,16 @@
 
 
 	$('.btnTambahHargaBiaya').on('click', function() {
+		resetFormHargaBiaya();
 		$('#modalHargaBiaya').modal('show');
 	});
+
+	function resetFormHargaBiaya() {
+		$('#id').val('');
+		$('#tahun_pelajaran_id').val('');
+		$('#jenis_biaya_id').val('');
+		$('#harga_biaya').val('');
+	}
 
 	function tabelHargaBiaya() {
 		let tabel = $('#tableHargaBiaya');

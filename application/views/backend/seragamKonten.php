@@ -165,7 +165,16 @@
 	});
 
 	$('.btnTambahJenisSeragam').on('click', function() {
-		$('#modalJenisSeragam').modal('show');
+		$('.btnTambahJenisSeragam').on('click', function() {
+    	resetFormJenisSeragam();
+			$('#modalJenisSeragam').modal('show');
+		});
+
+		function resetFormJenisSeragam() {
+			$('#id').val('');
+			$('#nama_jenis_seragam').val('');
+		}
+
 	});
 
 	function tabelJenisSeragam() {
@@ -265,7 +274,18 @@
 
 
 	$('.btnTambahStokSeragam').on('click', function() {
-		$('#modalStokSeragam').modal('show');
+		$('.btnTambahStokSeragam').on('click', function() {
+			resetFormStokSeragam();
+			$('#modalStokSeragam').modal('show');
+		});
+
+		function resetFormStokSeragam() {
+			$('#id').val('');
+			$('#jenis_seragam_id').val('');
+			$('#ukuran_seragam').val('');
+			$('#stok_seragam').val('');
+		}
+
 	});
 
 	function tabelStokSeragam() {
