@@ -17,29 +17,7 @@
           </div>
           <div class="card">
 
-            <!-- Tabel Jenis Seragam -->
-            <table id="tableJenisSeragam" class="table table-striped table-bordered mt-2">
-              <thead>
-                <tr>
-                  <th style="text-align: center;">No</th>
-                  <th style="text-align: center;">Jenis Seragam</th>
-                  <th style="text-align: center;">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-			<div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-				<div class="btn btn-primary btnTambahJenisSeragam mb-1">
-					<i class="fas fa-plus"></i> Tambah
-				</div>
-				<div class="card">
-
-
-          <!-- Tabel Stok Seragam -->
+                    <!-- Tabel Stok Seragam -->
 					<table id="tableStokSeragam" class="table table-striped table-bordered mt-2">
 						<thead>
 							<tr>
@@ -55,9 +33,32 @@
 					</table>
 				</div>
 			</div>
+
+
+			<div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+				<div class="btn btn-primary btnTambahJenisSeragam mb-1">
+					<i class="fas fa-plus"></i> Tambah
+				</div>
+				<div class="card">
+
+
+                    <!-- Tabel Jenis Seragam -->
+                    <table id="tableJenisSeragam" class="table table-striped table-bordered mt-2">
+              <thead>
+                <tr>
+                  <th style="text-align: center;">No</th>
+                  <th style="text-align: center;">Jenis Seragam</th>
+                  <th style="text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div>
-	<!-- /.card -->
 </div>
 
 <!-- Modal Jenis Seragam -->
@@ -115,18 +116,26 @@
 						<input type="hidden" class="form-control" id="id" name="id" value="">
 
 						<div class="mb-1">
-							<label for="jenis" class="form-label">Nama Jenis Seragam</label>
-							<select class="form-control" id="jenis" name="jenis">
+							<label for="jenis_seragam_id" class="form-label">Nama Jenis Seragam</label>
+							<select class="form-control" id="jenis_seragam_id" name="jenis_seragam_id">
 								<option value="">- Pilih Jenis Seragam -</option>
 							</select>
 							<div class="error-block"></div>
 						</div>
-            <div class="mb-1">
+            				<div class="mb-1">
 							<label for="ukuran_seragam" class="form-label">Ukuran</label>
-							<input type="text" class="form-control" name="ukuran_seragam" id="ukuran_seragam">
+							<select class="form-control" id="ukuran_seragam" name="ukuran_seragam">
+								<option value="">- Pilih Ukuran -</option>
+								<option value="S">S</option>
+								<option value="M">M</option>
+								<option value="L">L</option>
+								<option value="XL">XL</option>
+								<option value="XXL">XXL</option>
+								<option value="XXXL">XXXL</option>
+							</select>
 							<div class="error-block"></div>
 						</div>
-            <div class="mb-1">
+            				<div class="mb-1">
 							<label for="stok_seragam" class="form-label">Stok</label>
 							<input type="text" class="form-control" name="stok_seragam" id="stok_seragam">
 							<div class="error-block"></div>
@@ -151,7 +160,7 @@
 	$(document).ready(function() {
 		tabelJenisSeragam();
 		tabelStokSeragam();
-		$('#jenis').load('<?php echo base_url('seragam/getOptionJenisSeragam'); ?>');
+		$('#jenis_seragam_id').load('<?php echo base_url('seragam/getOptionJenisSeragam/'); ?>');
 
 	});
 
@@ -215,7 +224,6 @@
 	});
 
 	function editJenisSeragam(id) {
-		// tampilkan data dalam modal 
 		$.ajax({
 			url: '<?php echo base_url('seragam/edit_jenis_seragam'); ?>',
 			type: 'post',
@@ -277,8 +285,8 @@
 
 						tr.append('<td>' + no++ + '</td>');
 						tr.append('<td>' + item.nama_jenis_seragam + '</td>');
-            tr.append('<td>' + item.ukuran_seragam + '</td>');
-            tr.append('<td>' + item.stok_seragam + '</td>');
+						tr.append('<td>' + item.ukuran_seragam + '</td>');
+						tr.append('<td>' + item.stok_seragam + '</td>');
 
 
 						tr.append('<td>	<button class="btn btn-primary" onclick="editStokSeragam(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteStokSeragam(' + item.id + ')">Delete</button></td>');
@@ -295,7 +303,7 @@
 	}
 	$('#saveStokSeragam').on('click', function() {
 		var id = $('#id').val();
-		var jenis = $('#jenis').val();
+		var jenis_seragam_id = $('#jenis_seragam_id').val();
 		var ukuran_seragam = $('#ukuran_seragam').val();
     var stok_seragam = $('#stok_seragam').val();
 		let url = '<?php echo base_url('seragam/save_stok_seragam'); ?>';
@@ -305,8 +313,8 @@
 			type: 'POST',
 			data: {
 				id: id,
-				jenis: jenis,
-        ukuran_seragam: ukuran_seragam,
+				jenis_seragam_id: jenis_seragam_id,
+        		ukuran_seragam: ukuran_seragam,
 				stok_seragam: stok_seragam
 			},
 			dataType: 'json',
@@ -325,7 +333,7 @@
 
 	function editStokSeragam(id) {
 		$.ajax({
-			url: '<?php echo base_url('biaya/edit_stok_seragam'); ?>',
+			url: '<?php echo base_url('seragam/edit_stok_seragam'); ?>',
 			type: 'post',
 			data: {
 				id: id,
@@ -334,9 +342,9 @@
 			success: function(response) {
 				if (response.status) {
 					$('#id').val(response.data.id);
-					$('#jenis').val(response.data.jenis);
+					$('#jenis_seragam_id').val(response.data.jenis_seragam_id);
 					$('#ukuran_seragam').val(response.data.ukuran_seragam);
-          $('#stok_seragam').val(response.data.stok_seragam);
+          			$('#stok_seragam').val(response.data.stok_seragam);
 					$('#modalStokSeragam').modal('show');
 				} else {
 					alert(response.message);
@@ -347,7 +355,7 @@
 
 	function deleteStokSeragam(id) {
 		$.ajax({
-			url: '<?php echo base_url('biaya/delete_stok_seragam'); ?>',
+			url: '<?php echo base_url('seragam/delete_stok_seragam'); ?>',
 			type: 'POST',
 			data: {
 				id: id,
@@ -363,4 +371,5 @@
 			}
 		})
 	}
+
 </script>

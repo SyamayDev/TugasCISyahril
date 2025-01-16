@@ -86,7 +86,7 @@
 		tabel();
 		$('#id_tahun_pelajaran').load('<?php echo base_url('kelas/option_tahun_pelajaran'); ?>');
 		$('#id_tahun_pelajaran').change(function() {
-			let id = $(this).val(); // id tahun pelajaran
+			let id = $(this).val(); 
 			let url = '<?php echo base_url('kelas/option_jurusan'); ?>';
 			$('#id_jurusan').load(url + '/' + id);
 		})
@@ -132,7 +132,6 @@
 		$('#modal').modal('show');
 	});
 	$('.saveBtn').click(function() {
-		// lakukan proses simpan data, lalu tutup modal , lalu reload tabel
 		$.ajax({
 			url: '<?php echo base_url('kelas/save'); ?>',
 			type: 'POST',
@@ -159,7 +158,7 @@
 
 
 	function editKelas(id) {
-		// tampilkan data dalam modal 
+
 		$.ajax({
 			url: '<?php echo base_url('kelas/edit'); ?>',
 			type: 'POST',
@@ -183,7 +182,6 @@
 	};
 
 	function deleteKelas(id) {
-		// lakukan proses delete data, lalu reload tabel
 		$.ajax({
 			url: '<?php echo base_url('kelas/delete'); ?>',
 			type: 'POST',

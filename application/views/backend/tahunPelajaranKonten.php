@@ -129,7 +129,6 @@
 		$('#modalTahunPelajaran').modal('show');
 	});
 	$('.saveBtn').click(function() {
-		// lakukan proses simpan data, lalu tutup modal , lalu reload tabel
 		$.ajax({
 			url: '<?php echo base_url('tahun_pelajaran/save'); ?>',
 			type: 'POST',
@@ -156,7 +155,6 @@
 
 
 	function editTahunPelajaran(id) {
-		// tampilkan data dalam modal 
 		$.ajax({
 			url: '<?php echo base_url('tahun_pelajaran/edit'); ?>',
 			type: 'POST',
@@ -180,7 +178,6 @@
 	};
 
 	function deleteTahunPelajarar(id) {
-		// lakukan proses delete data, lalu reload tabel
 		$.ajax({
 			url: '<?php echo base_url('tahun_pelajaran/delete'); ?>',
 			type: 'POST',

@@ -135,4 +135,3 @@ class Jurusan extends CI_Controller
 	}
 }
 
-/* End of file: Jurusan.php */

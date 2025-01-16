@@ -199,6 +199,8 @@ class Masterdata_model extends CI_Model
 		$this->db->delete($this->tableJenisBiaya);
 		return $this->db->affected_rows();
 	}
+
+	// CRUD for Jenis Biaya
 	public function getAllJenisBiaya()
 	{
 		return $this->db->get($this->tableJenisBiaya);
@@ -208,6 +210,11 @@ class Masterdata_model extends CI_Model
 		$this->db->where('id', $id);
 		return $this->db->get($this->tableJenisBiaya);
 	}
+	public function getJenisBiayaByName($nama)
+	{
+		return $this->db->get_where('jenis_biaya', ['nama_jenis_biaya' => $nama, 'deleted_at' => 0])->row();
+	}
+
 
 	public function getJenisBiayaAktif()
 	{
@@ -231,6 +238,18 @@ class Masterdata_model extends CI_Model
 		return $this->db->get($this->tableHargaBiaya);
 	}
 
+	public function cekDuplicateHargaBiaya($id_jenis_biaya, $id_tahun_pelajaran, $id = null)
+	{
+		$this->db->where('jenis_biaya_id', $id_jenis_biaya);
+		$this->db->where('tahun_pelajaran_id', $id_tahun_pelajaran);
+		if ($id) {
+			$this->db->where('id !=', $id); 
+		}
+		$query = $this->db->get('harga_biaya');
+		return $query->num_rows() > 0;
+	}
+
+
 	public function saveHargaBiaya($data)
 	{
 		$this->db->insert($this->tableHargaBiaya, $data);
@@ -250,11 +269,6 @@ class Masterdata_model extends CI_Model
 		$this->db->delete($this->tableHargaBiaya);
 		return $this->db->affected_rows();
 	}
-
-
-
-// ----------------------------------------------------------------------
-
 
 
 	// CRUD for Jenis Seragam
@@ -286,22 +300,43 @@ class Masterdata_model extends CI_Model
 		$this->db->where('id', $id);
 		return $this->db->get($this->tableJenisSeragam);
 	}
+	public function CekDuplicateJenisSeragam($nama_jenis_seragam, $id = null)
+{
+    $this->db->where('nama_jenis_seragam', $nama_jenis_seragam);
+    $this->db->where('deleted_at', 0);
+    if ($id) {
+        $this->db->where('id !=', $id);
+    }
+    $query = $this->db->get('jenis_seragam');
+    return $query->num_rows() > 0;
+}
 
 
 	public function getAllStokSeragam()
 	{
-		$this->db->select($this->tableHargaBiaya . '.*, ' . $this->tableJenisBiaya . '.nama_jenis_biaya ,' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran');
-		$this->db->join($this->tableJenisBiaya, $this->tableJenisBiaya . '.id = ' . $this->tableHargaBiaya . '.jenis_biaya_id', 'left');
-		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableHargaBiaya . '.tahun_pelajaran_id', 'left');
-		$this->db->where($this->tableHargaBiaya . '.deleted_at', 0);
-		return $this->db->get($this->tableStokSeragam);
+		$this->db->select('stok_seragam.*, jenis_seragam.nama_jenis_seragam, jenis_seragam_harga.nama_jenis_seragam AS nama_harga');
+		$this->db->join('jenis_seragam', 'stok_seragam.jenis_seragam_id = jenis_seragam.id', 'left');
+		$this->db->join('jenis_seragam AS jenis_seragam_harga', 'jenis_seragam_harga.id = stok_seragam.jenis_seragam_id', 'left');
+		$this->db->where('stok_seragam.deleted_at', 0);
+		return $this->db->get('stok_seragam');
 	}
-
+	
 	public function getStokSeragamByID($id)
 	{
 		$this->db->where('id', $id);
 		return $this->db->get($this->tableStokSeragam);
 	}
+
+	public function getStokSeragamByUnique($jenis_seragam_id, $ukuran_seragam)
+	{
+		return $this->db->get_where('stok_seragam', [
+			'jenis_seragam_id' => $jenis_seragam_id,
+			'ukuran_seragam' => $ukuran_seragam,
+			'deleted_at' => 0
+		])->row();
+	}
+	
+
 
 	public function saveStokSeragam($data)
 	{

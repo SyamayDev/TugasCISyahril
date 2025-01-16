@@ -235,7 +235,6 @@
 	});
 
 	function editJenisBiaya(id) {
-		// tampilkan data dalam modal 
 		$.ajax({
 			url: '<?php echo base_url('biaya/edit_jenis_biaya'); ?>',
 			type: 'post',
@@ -255,6 +254,26 @@
 			}
 		});
 	}
+
+	function deleteJenisBiaya(id) {
+		$.ajax({
+			url: '<?php echo base_url('biaya/delete_jenis_biaya'); ?>',
+			type: 'POST',
+			data: {
+				id: id,
+			},
+			dataType: 'json',
+			success: function(response) {
+				if (response.status) {
+					alert(response.message);
+					tabelJenisBiaya();
+				} else {
+					alert(response.message);
+				}
+			}
+		})
+	}
+
 
 	$('.btnTambahHargaBiaya').on('click', function() {
 		$('#modalHargaBiaya').modal('show');
@@ -279,7 +298,6 @@
 						tr.append('<td>' + item.nama_tahun_pelajaran + '</td>');
 						tr.append('<td>' + item.nama_jenis_biaya + '</td>');
 						tr.append('<td>' + item.harga_biaya + '</td>');
-
 
 						tr.append('<td>	<button class="btn btn-primary" onclick="editHargaBiaya(' + item.id + ')">Edit</button> <button class="btn btn-danger" onclick="deleteHargaBiaya(' + item.id + ')">Delete</button></td>');
 						tabel.find('tbody').append(tr);

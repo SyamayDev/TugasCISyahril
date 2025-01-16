@@ -130,4 +130,3 @@ class Tahun_pelajaran extends CI_Controller
 	}
 }
 
-/* End of file: Tahun_pelajaran.php */

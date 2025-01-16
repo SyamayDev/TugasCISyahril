@@ -46,14 +46,28 @@ class Seragam extends CI_Controller
 	{
 		$id = $this->input->post('id');
 		$nama_jenis_seragam = $this->input->post('nama_jenis_seragam');
-
+	
+		if (empty($nama_jenis_seragam)) {
+			$ret['status'] = false;
+			$ret['message'] = 'Nama Jenis Seragam tidak boleh kosong.';
+			echo json_encode($ret);
+			return;
+		}
+	
+		$isDuplicate = $this->md->CekDuplicateJenisSeragam($nama_jenis_seragam, $id);
+		if ($isDuplicate) {
+			$ret['status'] = false;
+			$ret['message'] = 'Nama Jenis Seragam sudah ada.';
+			echo json_encode($ret);
+			return;
+		}
+	
 		$data = array(
 			'nama_jenis_seragam' => $nama_jenis_seragam,
-
 			'updated_at' => date('Y-m-d H:i:s'),
 			'deleted_at' => 0
 		);
-
+	
 		if ($id) {
 			$q = $this->md->updateJenisSeragam($id, $data);
 			if ($q) {
@@ -66,7 +80,6 @@ class Seragam extends CI_Controller
 		} else {
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$q = $this->md->saveJenisSeragam($data);
-
 			if ($q) {
 				$ret['status'] = true;
 				$ret['message'] = 'Data berhasil disimpan';
@@ -75,10 +88,10 @@ class Seragam extends CI_Controller
 				$ret['message'] = 'Data gagal disimpan';
 			}
 		}
-
-
+	
 		echo json_encode($ret);
 	}
+	
 
 
 	public function edit_jenis_seragam()
@@ -136,19 +149,33 @@ class Seragam extends CI_Controller
 	public function save_stok_seragam()
 	{
 		$id = $this->input->post('id');
-		$id_jenis_seragam = $this->input->post('jenis_seragam_id');
-		$ukuran_seragam = $this->input->post('ukuran_seragam');
-        $stok_seragam = $this->input->post('stok_seragam');
+		$id_jenis_seragam = trim($this->input->post('jenis_seragam_id'));
+		$ukuran_seragam = trim($this->input->post('ukuran_seragam'));
+		$stok_seragam = trim($this->input->post('stok_seragam'));
+	
+		if (empty($id_jenis_seragam) || empty($ukuran_seragam) || empty($stok_seragam)) {
+			$ret['status'] = false;
+			$ret['message'] = 'Jenis seragam, ukuran seragam, dan stok seragam tidak boleh kosong';
+			echo json_encode($ret);
+			return;
+		}
 
+		$existing = $this->md->getStokSeragamByUnique($id_jenis_seragam, $ukuran_seragam);
+		if ($existing && (!$id || $existing->id != $id)) {
+			$ret['status'] = false;
+			$ret['message'] = 'Data stok seragam dengan jenis dan ukuran yang sama sudah ada';
+			echo json_encode($ret);
+			return;
+		}
+	
 		$data = array(
-			'jenis_biaya_id' => $id_jenis_seragam,
+			'jenis_seragam_id' => $id_jenis_seragam,
 			'ukuran_seragam' => $ukuran_seragam,
-            'stok_seragam' => $stok_seragam,
-
+			'stok_seragam' => $stok_seragam,
 			'updated_at' => date('Y-m-d H:i:s'),
 			'deleted_at' => 0
 		);
-
+	
 		if ($id) {
 			$q = $this->md->updateStokSeragam($id, $data);
 			if ($q) {
@@ -161,7 +188,7 @@ class Seragam extends CI_Controller
 		} else {
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$q = $this->md->saveStokSeragam($data);
-
+	
 			if ($q) {
 				$ret['status'] = true;
 				$ret['message'] = 'Data berhasil disimpan';
@@ -170,11 +197,10 @@ class Seragam extends CI_Controller
 				$ret['message'] = 'Data gagal disimpan';
 			}
 		}
-
-
+	
 		echo json_encode($ret);
 	}
-
+	
 	public function edit_stok_seragam()
 	{
 		$id = $this->input->post('id');
@@ -190,6 +216,7 @@ class Seragam extends CI_Controller
 		}
 		echo json_encode($ret);
 	}
+	
 	public function delete_stok_seragam()
 	{
 		$id = $this->input->post('id');
@@ -204,9 +231,10 @@ class Seragam extends CI_Controller
 		}
 		echo json_encode($ret);
 	}
+
 	public function getOptionJenisSeragam()
 	{
-		$q = $this->md->getJenisSeragam();
+		$q = $this->md->getAllJenisSeragam();
 		$opt = '<option value="">-- Pilih Jenis Biaya --</option>';
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
@@ -217,5 +245,3 @@ class Seragam extends CI_Controller
 	}
 
 }
-
-/* End of file: Biaya.php */

@@ -135,4 +135,3 @@ class Kelas extends CI_Controller
 	}
 }
 
-/* End of file: Kelas.php */

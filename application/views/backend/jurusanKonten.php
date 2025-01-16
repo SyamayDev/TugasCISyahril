@@ -116,7 +116,6 @@
 		$('#modal').modal('show');
 	});
 	$('.saveBtn').click(function() {
-		// lakukan proses simpan data, lalu tutup modal , lalu reload tabel
 		$.ajax({
 			url: '<?php echo base_url('jurusan/save'); ?>',
 			type: 'POST',
@@ -142,7 +141,6 @@
 
 
 	function editJurusan(id) {
-		// tampilkan data dalam modal 
 		$.ajax({
 			url: '<?php echo base_url('jurusan/edit'); ?>',
 			type: 'POST',
@@ -165,7 +163,6 @@
 	};
 
 	function deleteJurusan(id) {
-		// lakukan proses delete data, lalu reload tabel
 		$.ajax({
 			url: '<?php echo base_url('jurusan/delete'); ?>',
 			type: 'POST',
