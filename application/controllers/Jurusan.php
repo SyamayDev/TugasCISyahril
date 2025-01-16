@@ -1,72 +1,138 @@
 <?php
+defined('BASEPATH') or exit('No direct script access allowed');
+
 class Jurusan extends CI_Controller
 {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('Masterdata_model', 'md'); 
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('Masterdata_model', 'md');
+	}
 
-    public function index() {
+	public function index()
+	{
+		$data = array(
+			'menu' => 'backend/menu',
+			'content' => 'backend/jurusanKonten',
+			'title' => 'Admin'
+		);
+		$this->load->view('template', $data);
+	}
 
-        $data = [
-            'menu' => 'backend/menu',
-            'content' => 'backend/jurusanKonten', 
-            'title' => 'Manajemen Jurusan'
-        ];
+	public function table_jurusan()
+	{
+		$q = $this->md->getAllJurusanNotDeleted();
+		$dt = [];
+		if ($q->num_rows() > 0) {
+			foreach ($q->result() as $row) {
+				$dt[] = $row;
+			}
 
-        $this->load->view('template', $data);
-    }
+			$ret['status'] = true;
+			$ret['data'] = $dt;
+			$ret['message'] = '';
+		} else {
+			$ret['status'] = false;
+			$ret['data'] = [];
+			$ret['message'] = 'Data tidak tersedia';
+		}
+		echo json_encode($ret);
+	}
 
-    public function save()
-    {
-        $data = [
-            'id_tahun_pelajaran' => $this->input->post('id_tahun_pelajaran'),
-            'nama_jurusan' => $this->input->post('nama_jurusan')
-        ];
-    
-        $id = $this->input->post('jurusan_id');
+	public function option_tahun_pelajaran()
+	{
+		$q = $this->md->getAllTahunPelajaranNotDeleted();
+		$ret = '';
+		if ($q->num_rows() > 0) {
+			foreach ($q->result() as $row) {
+				$ret .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
+			}
+		}
+		echo $ret;
+	}
 
-        $this->db->where('id_tahun_pelajaran', $data['id_tahun_pelajaran']);
-        $this->db->where('nama_jurusan', $data['nama_jurusan']);
-        if ($id) {
-            $this->db->where('id !=', $id);
-        }
-        $exists = $this->db->get('jurusan')->num_rows();
-    
-        if ($exists > 0) {
-            echo json_encode(['status' => false, 'message' => 'Jurusan sudah ada di tahun ajaran ini.']);
-        } else {
-            if ($id) {
-                $this->db->where('id', $id);
-                $update = $this->db->update('jurusan', $data);
-                echo json_encode(['status' => $update, 'message' => $update ? 'Data berhasil diperbarui.' : 'Data gagal diperbarui.']);
-            } else {
-                $insert = $this->db->insert('jurusan', $data);
-                echo json_encode(['status' => $insert, 'message' => $insert ? 'Data berhasil ditambahkan.' : 'Data gagal ditambahkan.']);
-            }
-        }
-    }
-    
+	public function save()
+	{
 
-    public function get_by_id($id)
-    {
-        $data = $this->db->get_where('jurusan', ['id' => $id])->row_array();
-        echo json_encode(['status' => true, 'data' => $data]);
-    }
+		$id = $this->input->post('id');
+		$id_tahun_pelajaran = $this->input->post('id_tahun_pelajaran');
+		$data['nama_jurusan'] = $this->input->post('nama_jurusan');
+		$data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
+		$data['created_at'] = date('Y-m-d H:i:s');
+		$data['updated_at'] = date('Y-m-d H:i:s');
+		$data['deleted_at'] = 0;
 
-    public function table_jurusan()
-    {
-        $this->db->select('jurusan.*, data_tahun_pelajaran.nama_tahun_pelajaran');
-        $this->db->join('data_tahun_pelajaran', 'jurusan.id_tahun_pelajaran = data_tahun_pelajaran.id');
-        $data = $this->db->get('jurusan')->result();
-        echo json_encode(['status' => true, 'data' => $data]);
-    }
+		if ($data['nama_jurusan']) {
+			$cek = $this->md->cekJurusanDuplicate($data['nama_jurusan'], $id_tahun_pelajaran, $id);
+			if ($cek->num_rows() > 0) {
+				$ret['status'] = false;
+				$ret['message'] = 'Jurusan sudah ada';
+			} else {
 
-    public function delete($id)
-    {
-        $this->db->where('id', $id);
-        $delete = $this->db->delete('jurusan');
-        echo json_encode(['status' => $delete, 'message' => $delete ? 'Data berhasil dihapus.' : 'Data gagal dihapus.']);
-    }
+				if ($id) {
+					$q = $this->md->updateJurusan($id, $data);
+					if ($q) {
+						$ret['status'] = true;
+						$ret['message'] = 'Data berhasil diupdate';
+					} else {
+						$ret['status'] = false;
+						$ret['message'] = 'Data gagal diupdate';
+					}
+				} else {
+					$q = $this->md->saveJurusan($data);
+					if ($q) {
+						$ret['status'] = true;
+						$ret['message'] = 'Data berhasil disimpan';
+					} else {
+						$ret['status'] = false;
+						$ret['message'] = 'Data gagal disimpan';
+					}
+				}
+			}
+		} else {
+			$ret['status'] = false;
+			$ret['message'] = 'Data gagal disimpan';
+		}
+		echo json_encode($ret);
+	}
+
+	public function delete()
+	{
+		$id = $this->input->post('id');
+		$data['deleted_at'] = time();
+		$q = $this->md->updateJurusan($id, $data);
+		if ($q) {
+			$ret['status'] = true;
+			$ret['message'] = 'Data berhasil dihapus';
+		} else {
+			$ret['status'] = false;
+			$ret['message'] = 'Data gagal dihapus';
+		}
+		echo json_encode($ret);
+	}
+	public function edit()
+	{
+
+		$id = $this->input->post('id');
+		$q = $this->md->getJurusanByID($id);
+		if ($q->num_rows() > 0) {
+			$ret = array(
+				'status' => true,
+				'data' => $q->row(),
+				'message' => ''
+			);
+		} else {
+			$ret = array(
+				'status' => false,
+				'data' => [],
+				'message' => 'Data tidak ditemukan',
+				'query' => $this->db->last_query()
+			);
+		}
+
+		echo json_encode($ret);
+	}
 }
+
+/* End of file: Jurusan.php */

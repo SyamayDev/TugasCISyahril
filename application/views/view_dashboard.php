@@ -2,227 +2,241 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Dashboard</title>
-    <link href="<?= base_url('public/template/css/bootstrap.min.css'); ?>" rel="stylesheet">
-    <script src="<?= base_url('public/template/js/jquery-3.7.1.min.js'); ?>"></script>
-    <script src="<?= base_url('public/template/js/bootstrap.bundle.min.js'); ?>"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="<?php echo base_url('public/template/css/bootstrap.min.css'); ?>" rel="stylesheet">
+	<title>Dashboard</title>
 </head>
 
 <body>
-    <div class="container mt-4">
-        <!-- Ini Header Dashboard -->
-        <div class="row align-items-center mb-4">
-            <div class="col-md-6">
-                <h1 class="display-4">Akun Pengguna</h1>
-            </div>
-            <div class="col-md-6 text-md-right text-center">
-                <h4>Kamu sedang login di akun: <span
-                        class="font-weight-bold"><?= $this->session->userdata('username'); ?></span></h4>
-            </div>
-        </div>
+	<div class="row justify-content-center">
+		<div class="card col-md-8 mt-5">
+			<div class="card-header">
+				<h1>Halaman Dashboard</h1>
+			</div>
+			<div class="card-body">
+				<div class="mb-3">
+					<button type="button" class="btn btn-primary btnTambahUser">Tambah User</button>
+					<a href="<?= base_url('dashboard/logout'); ?>" class="btn btn-danger">Logout</a>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-striped" id="tabelUser">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>Username</th>
+								<th>Password</th>
+								<th>Aksi</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- Data akan dimuat menggunakan JavaScript -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 
-        <!-- Ini Card Kontrol -->
-        <div class="row justify-content-center">
-            <div class="card col-md-10">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Kelola Data User</h5>
-                    <div>
-                        <button id="addUserBtn" class="btn btn-primary mr-2">Tambah User</button>
-                        <a href="<?= base_url('login/logout') ?>" class="btn btn-danger">Logout</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <!-- Ini Tabel User -->
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th>Username</th>
-                                    <th>Password</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="userTableBody">
-                                <?php $no = 1; ?>
-                                <?php foreach ($users as $user): ?>
-                                <tr id="userRow<?= $user->id; ?>">
-                                    <td class="text-center"><?= $no++; ?></td>
-                                    <td><?= $user->username ?></td>
-                                    <td><?= $user->password ?></td>
-                                    <td class="text-center">
-                                        <?php if ($user->id != $this->session->userdata('user_id')): ?>
-                                        <button class="btn btn-warning btn-sm editUserBtn"
-                                            data-id="<?= $user->id; ?>">Edit</button>
-                                        <button class="btn btn-danger btn-sm deleteUserBtn"
-                                            data-id="<?= $user->id; ?>">Delete</button>
-                                        <?php else: ?>
-                                        <span class="text-muted">Tidak dapat diedit</span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- Modal -->
+	<div class="modal fade" id="modal-user" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Tambah User</h5>
+					<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="form-user">
+						<input type="hidden" id="id" name="id" value="">
+						<div class="mb-3">
+							<label for="username" class="form-label">Username</label>
+							<input type="text" class="form-control" id="username" name="username" value="">
+						</div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="text" class="form-control" id="password" name="password" value="">
+                        </div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary saveBtn">Simpan</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <script>
-    $(document).ready(function() {
-        // Tambah User
-        $('#addUserBtn').click(function() {
-            Swal.fire({
-                title: 'Tambah User Baru',
-                html: ` 
-                <br><label for="id">ID Otomatis</label>
-                <input id="id" class="swal2-input" value="Auto-generated" readonly><br>
-                <label for="username">Username : </label>
-                <input id="username" class="swal2-input" placeholder="Masukkan Username"><br>
-                <label for="password">Password : </label>
-                <input id="password" class="swal2-input" type="password" placeholder="Masukkan Password">
-            `,
-                showCancelButton: true,
-                confirmButtonText: 'Simpan',
-                preConfirm: () => {
-                    const username = $('#username').val();
-                    const password = $('#password').val();
+	<script src="<?php echo base_url('public/template/js/bootstrap.bundle.min.js'); ?>"></script>
+	<script src="<?php echo base_url('public/template/js/jquery-3.7.1.min.js'); ?>"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-                    if (!username || !password) {
-                        Swal.showValidationMessage('Semua kolom harus diisi!');
-                    }
+	<script>
+		$(document).ready(function () {
+			tableUser();
 
-                    return $.ajax({
-                        url: '<?= base_url("dashboard/check_username") ?>',
-                        type: 'POST',
-                        data: {
-                            username
-                        },
-                    }).then((response) => {
-                        const res = JSON.parse(response);
-                        if (res.status === 'error') {
-                            Swal.showValidationMessage(res.message);
-                        }
-                        return {
-                            username,
-                            password
-                        };
-                    });
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '<?= base_url("dashboard/save") ?>',
-                        type: 'POST',
-                        data: result.value,
-                        success: function(response) {
-                            Swal.fire('Berhasil!', 'User berhasil ditambahkan.',
-                                'success').then(() => location.reload());
-                        }
-                    });
-                }
-            });
-        });
+			// Tombol Tambah User
+			$('.btnTambahUser').on('click', function () {
+				resetForm(); // Reset form saat membuka modal
+				$('.modal-title').text('Tambah User'); // Set judul modal
+				$('#modal-user').modal('show');
+			});
 
-        // Edit User
-        $(document).on('click', '.editUserBtn', function() {
-            const userId = $(this).data('id');
-            $.getJSON(`<?= base_url('dashboard/edit/') ?>${userId}`, function(response) {
-                if (response.status === 'success') {
-                    const user = response.data;
-                    Swal.fire({
-                        title: 'Edit User',
-                        html: `
-                        <br><label for="id">ID User : </label>
-                        <input id="id" class="swal2-input" value="${user.id}" readonly><br>
-                        <label for="username">Username : </label>
-                        <input id="username" class="swal2-input" value="${user.username}" placeholder="Username"><br>
-                        <br><label for="password">Password : </label>
-                        <input id="password" class="swal2-input" value="${user.password}" placeholder="Password">
-                    `,
-                        showCancelButton: true,
-                        confirmButtonText: 'Update',
-                        preConfirm: () => {
-                            const username = $('#username').val();
-                            const password = $('#password').val();
+			// Tombol Simpan Data
+			$('.saveBtn').on('click', function () {
+				let id = $('#id').val();
+				let username = $('#username').val().trim();
+				let password = $('#password').val().trim();
 
-                            if (!username || !password) {
-                                Swal.showValidationMessage(
-                                    'Semua kolom harus diisi!');
-                            }
+				// Validasi input
+				if (!username || !password) {
+					Swal.fire({
+						icon: 'warning',
+						title: 'Peringatan',
+						text: 'Username dan Password tidak boleh kosong!'
+					});
+					return;
+				}
 
-                            return $.ajax({
-                                url: '<?= base_url("dashboard/check_username") ?>',
-                                type: 'POST',
-                                data: {
-                                    username,
-                                    id: user.id
-                                },
-                            }).then((response) => {
-                                const res = JSON.parse(response);
-                                if (res.status === 'error') {
-                                    Swal.showValidationMessage(res.message);
-                                }
-                                return {
-                                    id: userId,
-                                    username,
-                                    password
-                                };
-                            });
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: '<?= base_url("dashboard/update_user") ?>',
-                                type: 'POST',
-                                data: result.value,
-                                success: function(response) {
-                                    Swal.fire('Berhasil!',
-                                        'User berhasil diperbarui.',
-                                        'success').then(() => location
-                                        .reload());
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    Swal.fire('Error', response.message, 'error');
-                }
-            });
-        });
+				let url = id ? '<?php echo base_url("dashboard/update"); ?>' : '<?php echo base_url("dashboard/save"); ?>';
 
-        // Hapus User
-        $(document).on('click', '.deleteUserBtn', function() {
-            const userId = $(this).data('id');
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: 'Data yang dihapus tidak dapat dikembalikan!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: `<?= base_url('dashboard/delete/') ?>${userId}`,
-                        type: 'POST',
-                        success: function() {
-                            Swal.fire('Berhasil!', 'User berhasil dihapus.',
-                                'success').then(() => $(`#userRow${userId}`)
-                                .remove());
-                        }
-                    });
-                }
-            });
-        });
-    });
-    </script>
+				$.ajax({
+					url: url,
+					type: 'POST',
+					data: { id, username, password },
+					dataType: 'json',
+					success: function (response) {
+						if (response.status) {
+							Swal.fire({
+								icon: 'success',
+								title: 'Berhasil',
+								text: response.message
+							});
+							$('#modal-user').modal('hide');
+							tableUser();
+						} else {
+							Swal.fire({
+								icon: 'error',
+								title: 'Gagal',
+								text: response.message
+							});
+						}
+					}
+				});
+			});
+		});
+
+		function tableUser() {
+			let tabelUser = $('#tabelUser');
+
+			$.ajax({
+				url: '<?php echo base_url("dashboard/tableUser"); ?>',
+				type: 'GET',
+				dataType: 'json',
+				success: function (response) {
+					tabelUser.find('tbody').html('');
+
+					if (response.status) {
+						let no = 1;
+						$.each(response.data, function (i, item) {
+							let tr = $('<tr>');
+							tr.append('<td>' + no++ + '</td>');
+							tr.append('<td>' + item.username + '</td>');
+                            tr.append('<td>' + item.password + '</td>');
+
+							let actionBtns = '';
+							if (item.cannot_edit) {
+								actionBtns = '<span class="text-danger">Tidak bisa diedit</span>';
+							} else {
+								actionBtns =
+									'<button class="btn btn-primary" onclick="editUser(' + item.id + ')">Edit</button> ' +
+									'<button class="btn btn-danger" onclick="confirmDelete(' + item.id + ')">Delete</button>';
+							}
+
+							tr.append('<td>' + actionBtns + '</td>');
+							tabelUser.find('tbody').append(tr);
+						});
+					} else {
+						tabelUser.find('tbody').append('<tr><td colspan="4" class="text-center">' + response.message + '</td></tr>');
+					}
+				}
+			});
+		}
+
+		function editUser(id) {
+			$.ajax({
+				url: '<?php echo base_url("dashboard/edit"); ?>',
+				type: 'POST',
+				data: { id },
+				dataType: 'json',
+				success: function (response) {
+					if (response.status) {
+						resetForm();
+						$('#id').val(response.data.id);
+						$('#username').val(response.data.username);
+						$('#password').val(''); // Kosongkan password untuk keamanan
+						$('.modal-title').text('Edit User');
+						$('#modal-user').modal('show');
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Gagal',
+							text: response.message
+						});
+					}
+				}
+			});
+		}
+
+		function confirmDelete(id) {
+			Swal.fire({
+				title: 'Apakah Anda yakin?',
+				text: 'Data yang dihapus tidak dapat dikembalikan!',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#d33',
+				cancelButtonColor: '#3085d6',
+				confirmButtonText: 'Ya, hapus!'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					deleteUser(id);
+				}
+			});
+		}
+
+		function deleteUser(id) {
+			$.ajax({
+				url: '<?php echo base_url("dashboard/delete"); ?>',
+				type: 'POST',
+				data: { id },
+				dataType: 'json',
+				success: function (response) {
+					if (response.status) {
+						Swal.fire({
+							icon: 'success',
+							title: 'Berhasil',
+							text: response.message
+						});
+						tableUser();
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Gagal',
+							text: response.message
+						});
+					}
+				}
+			});
+		}
+
+		function resetForm() {
+			$('#id').val('');
+			$('#username').val('');
+			$('#password').val('');
+		}
+	</script>
 </body>
 
 </html>
