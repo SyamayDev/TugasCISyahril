@@ -10,85 +10,13 @@ class Masterdata_model extends CI_Model
 	protected $tableJurusan = 'data_jurusan';
 	protected $tableJenisBiaya = 'jenis_biaya';
 	protected $tableHargaBiaya = 'harga_biaya';
+	protected $tableJenisSeragam = 'jenis_seragam';
+	protected $tableStokSeragam = 'stok_seragam';
 
 	public function __construct()
 	{
 		parent::__construct();
 	}
-
-
-	// CRUD for Jenis Biaya
-
-    public function getAllJenisBiaya()
-    {
-        return $this->db->get($this->tableJenisBiaya);
-    }
-
-	public function getAllJenisBiayaNotDeleted() 
-	{
-		$this->db->where('deleted_at', 0);
-		return $this->db->get($this->tableJenisBiaya);
-	}
-	
-
-	public function getJenisBiayaByID($id)
-	{
-		$this->db->where('id_jenis_biaya', $id);
-		$this->db->where('deleted_at', 0); 
-		return $this->db->get($this->tableJenisBiaya, ['id' => $id]);
-	}
-	
-	public function getAllJenisBiayaAktif()
-	{
-		$this->db->where('status_aktif', 1); 
-		$this->db->where('deleted_at', 0);  
-		return $this->db->get($this->tableJenisBiaya);  
-	}
-
-
-	public function cekJenisBiayaDuplicate($nama_jenis_biaya, $id = null) {
-		if ($id) {
-			$this->db->where('id_jenis_biaya !=', $id);
-		}
-		$this->db->where('nama_jenis_biaya', $nama_jenis_biaya);
-		return $this->db->get($this->tableJenisBiaya);
-	}
-	
-
-    public function saveJenisBiaya($data)
-    {
-        $this->db->insert($this->tableJenisBiaya, $data);
-        return $this->db->insert_id();
-    }
-
-	public function updateJenisBiaya($id, $data) {
-		$this->db->where('id_jenis_biaya', $id); 
-		$this->db->update($this->tableJenisBiaya, $data);
-		
-		if($this->db->affected_rows() > 0) {
-			return [
-				'status' => true,
-				'message' => 'Data jenis biaya berhasil diperbarui.'
-			];
-		} else {
-			return [
-				'status' => false,
-				'message' => 'Data jenis biaya gagal diperbarui.'
-				];
-		}
-	}
-	
-
-	public function deleteJenisBiaya($id)
-	{
-		$data = [
-			'deleted_at' => time() 
-		];
-		$this->db->where('id_jenis_biaya', $id);
-		$this->db->update($this->tableJenisBiaya, $data);
-		return $this->db->affected_rows();
-	}
-	
 
 	// CRUD for Tahun Pelajaran
 
@@ -253,64 +181,153 @@ class Masterdata_model extends CI_Model
 		return $this->db->affected_rows();
 	}
 
-		// CRUD for Harga Biaya
-		public function getAllHargaBiaya()
-		{
-			return $this->db->get($this->tableHargaBiaya);
-		}
-	
-		public function getAllHargaBiayaNotDeleted() {
-			$this->db->select("{$this->tableHargaBiaya}.*, 
-							   {$this->tableTahunAjaran}.nama_tahun_pelajaran, 
-							   {$this->tableJenisBiaya}.nama_jenis_biaya");
-							   $this->db->join("{$this->tableTahunAjaran}", "{$this->tableTahunAjaran}.id = {$this->tableHargaBiaya}.id_tahun_ajaran", 'left');
-			$this->db->join("{$this->tableJenisBiaya}", "{$this->tableJenisBiaya}.id_jenis_biaya = {$this->tableHargaBiaya}.id_jenis_biaya", 'left');
-			return $this->db->get($this->tableHargaBiaya);
-		}
-		
-		public function getHargaBiayaByID($id) {
-			$this->db->select("harga_biaya.*, 
-			tahun_ajaran.id AS id_tahun_ajaran, 
-			tahun_ajaran.nama_tahun_pelajaran, 
-			jenis_biaya.nama_jenis_biaya");
-		$this->db->from('harga_biaya');
-		$this->db->join('tahun_ajaran', 'tahun_ajaran.id = harga_biaya.id_tahun_ajaran', 'left');
-		$this->db->join('jenis_biaya', 'jenis_biaya.id_jenis_biaya = harga_biaya.id_jenis_biaya', 'left');
-		$this->db->where('harga_biaya.id_harga_biaya', $id_harga_biaya);
-		$query = $this->db->get();
-		return $query->row();
-		}
-	
-		public function cekHargaBiayaDuplicate($id_tahun_ajaran, $id_jenis_biaya, $id = null)
-		{
-			$this->db->where('id_tahun_ajaran', $id_tahun_ajaran);
-			$this->db->where('id_jenis_biaya', $id_jenis_biaya);
-			if ($id) {
-				$this->db->where('id_harga_biaya !=', $id);
-			}
-			return $this->db->get($this->tableHargaBiaya);
-		}
-	
-		public function saveHargaBiaya($data)
-		{
-			$this->db->insert($this->tableHargaBiaya, $data);
-			return $this->db->insert_id();
-		}
-	
-		public function updateHargaBiaya($id, $data)
-		{
-			$this->db->where('id_harga_biaya', $id);
-			$this->db->update($this->tableHargaBiaya, $data);
-			return $this->db->affected_rows();
-		}
-	
-		public function deleteHargaBiaya($id)
-		{
-			$this->db->where('id_harga_biaya', $id);
-			$this->db->delete($this->tableHargaBiaya);
-			return $this->db->affected_rows();
-		}
-	
+	public function saveJenisBiaya($data)
+	{
+		$this->db->insert($this->tableJenisBiaya, $data);
+		return $this->db->insert_id();
+	}
+	public function updateJenisBiaya($id, $data)
+	{
+		$this->db->where('id', $id);
+		$this->db->update($this->tableJenisBiaya, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function deleteJenisBiaya($id)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete($this->tableJenisBiaya);
+		return $this->db->affected_rows();
+	}
+	public function getAllJenisBiaya()
+	{
+		return $this->db->get($this->tableJenisBiaya);
+	}
+	public function getJenisBiayaByID($id)
+	{
+		$this->db->where('id', $id);
+		return $this->db->get($this->tableJenisBiaya);
+	}
+
+	public function getJenisBiayaAktif()
+	{
+		$this->db->where('deleted_at', 0);
+		$this->db->where('status_jenis_biaya', 1);
+		return $this->db->get($this->tableJenisBiaya);
+	}
+
+	public function getAllHargaBiaya()
+	{
+		$this->db->select($this->tableHargaBiaya . '.*, ' . $this->tableJenisBiaya . '.nama_jenis_biaya ,' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran');
+		$this->db->join($this->tableJenisBiaya, $this->tableJenisBiaya . '.id = ' . $this->tableHargaBiaya . '.jenis_biaya_id', 'left');
+		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableHargaBiaya . '.tahun_pelajaran_id', 'left');
+		$this->db->where($this->tableHargaBiaya . '.deleted_at', 0);
+		return $this->db->get($this->tableHargaBiaya);
+	}
+
+	public function getHargaBiayaByID($id)
+	{
+		$this->db->where('id', $id);
+		return $this->db->get($this->tableHargaBiaya);
+	}
+
+	public function saveHargaBiaya($data)
+	{
+		$this->db->insert($this->tableHargaBiaya, $data);
+		return $this->db->insert_id();
+	}
+
+	public function updateHargaBiaya($id, $data)
+	{
+		$this->db->where('id', $id);
+		$this->db->update($this->tableHargaBiaya, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function deleteHargaBiaya($id)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete($this->tableHargaBiaya);
+		return $this->db->affected_rows();
+	}
+
+
+
+// ----------------------------------------------------------------------
+
+
+
+	// CRUD for Jenis Seragam
+
+	public function saveJenisSeragam($data)
+	{
+		$this->db->insert($this->tableJenisSeragam, $data);
+		return $this->db->insert_id();
+	}
+	public function updateJenisSeragam($id, $data)
+	{
+		$this->db->where('id', $id);
+		$this->db->update($this->tableJenisSeragam, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function deleteJenisSeragam($id)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete($this->tableJenisSeragam);
+		return $this->db->affected_rows();
+	}
+	public function getAllJenisSeragam()
+	{
+		return $this->db->get($this->tableJenisSeragam);
+	}
+	public function getJenisSeragamByID($id)
+	{
+		$this->db->where('id', $id);
+		return $this->db->get($this->tableJenisSeragam);
+	}
+
+
+	public function getAllStokSeragam()
+	{
+		$this->db->select($this->tableHargaBiaya . '.*, ' . $this->tableJenisBiaya . '.nama_jenis_biaya ,' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran');
+		$this->db->join($this->tableJenisBiaya, $this->tableJenisBiaya . '.id = ' . $this->tableHargaBiaya . '.jenis_biaya_id', 'left');
+		$this->db->join($this->tableTahunPelajaran, $this->tableTahunPelajaran . '.id = ' . $this->tableHargaBiaya . '.tahun_pelajaran_id', 'left');
+		$this->db->where($this->tableHargaBiaya . '.deleted_at', 0);
+		return $this->db->get($this->tableStokSeragam);
+	}
+
+	public function getStokSeragamByID($id)
+	{
+		$this->db->where('id', $id);
+		return $this->db->get($this->tableStokSeragam);
+	}
+
+	public function saveStokSeragam($data)
+	{
+		$this->db->insert($this->tableStokSeragam, $data);
+		return $this->db->insert_id();
+	}
+
+	public function updateStokSeragam($id, $data)
+	{
+		$this->db->where('id', $id);
+		$this->db->update($this->tableStokSeragam, $data);
+		return $this->db->affected_rows();
+	}
+
+	public function deleteStokSeragam($id)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete($this->tableStokSeragam);
+		return $this->db->affected_rows();
+	}
+
+
 }
 
-/* End of file: Masterdata_model.php */
+
+
+
+
+
