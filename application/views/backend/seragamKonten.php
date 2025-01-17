@@ -12,7 +12,7 @@
 	<div class="card-body">
 		<div class="tab-content" id="custom-tabs-one-tabContent">
       <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-          <div class="btn btn-primary btnTambahStokSeragam mb-1">
+          <div class="btn btn-primary btnTambahStokSeragam mb-1" data-target="srok_seragam">
             <i class="fas fa-plus"></i> Tambah
           </div>
           <div class="card">
@@ -36,7 +36,7 @@
 
 
 			<div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-				<div class="btn btn-primary btnTambahJenisSeragam mb-1">
+				<div class="btn btn-primary btnTambahJenisSeragam mb-1" data-target="jenis_seragam">
 					<i class="fas fa-plus"></i> Tambah
 				</div>
 				<div class="card">
@@ -62,7 +62,7 @@
 </div>
 
 <!-- Modal Jenis Seragam -->
-<div class="modal" id="modalJenisSeragam" tabindex=" -1" role="dialog">
+<div class="modal" id="modal_jenis_seragam" tabindex=" -1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -100,7 +100,7 @@
 </div>
 
 
-<div class="modal" id="modalStokSeragam" tabindex=" -1" role="dialog">
+<div class="modal" id="modal_stok_seragam" tabindex=" -1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">

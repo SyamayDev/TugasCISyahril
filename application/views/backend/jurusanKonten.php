@@ -71,7 +71,6 @@
 </div>
 
 
-
 <script>
 	$(document).ready(function() {
 		tabel();

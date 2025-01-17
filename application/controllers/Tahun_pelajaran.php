@@ -8,6 +8,12 @@ class Tahun_pelajaran extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		
+		if (!$this->session->userdata('is_login')) {
+            redirect('login', 'refresh'); 
+        }
+
+		$this->load->model('User_model');
 		$this->load->model('Masterdata_model', 'md');
 	}
 
