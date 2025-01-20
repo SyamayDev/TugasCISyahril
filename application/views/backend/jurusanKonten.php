@@ -40,18 +40,18 @@
             <div class="modal-body">
                 <form id="form_jurusan" action="#" method="post" enctype="multipart/form-data">
                     <input type="hidden" class="form-control" id="Jurusanid" name="id" value="">
-                    
+
                     <div class="mb-3">
                         <label for="id_tahun_pelajaran" class="form-label">Nama Tahun Pelajaran</label>
                         <select class="form-control loadSelect" data-target="tahun_pelajaran" name="id_tahun_pelajaran" id="id_tahun_pelajaran">
                             <option value="">- Pilih Tahun Pelajaran -</option>
                         </select>
-                        <div class="error-block"></div>
+                        <div class="error-block text-danger"></div>
                     </div>
                     <div class="mb-3">
                         <label for="nama_jurusan" class="form-label">Nama Jurusan</label>
                         <input type="text" class="form-control" id="nama_jurusan" name="nama_jurusan" value="">
-                        <div class="error-block"></div>
+                        <div class="error-block text-danger"></div>
                     </div>
                 </form>
             </div>

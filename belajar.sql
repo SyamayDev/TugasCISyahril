@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 16 Jan 2025 pada 16.49
+-- Waktu pembuatan: 20 Jan 2025 pada 15.29
 -- Versi server: 8.0.30
 -- Versi PHP: 7.4.33
 
@@ -45,7 +45,8 @@ INSERT INTO `data_jurusan` (`id`, `id_tahun_pelajaran`, `nama_jurusan`, `created
 (5, 1, 'TKJ', '2025-01-14 13:21:18', '2025-01-14 13:21:18', 0),
 (6, 2, 'RPL', '2025-01-14 13:21:42', '2025-01-14 13:21:42', 0),
 (7, 2, 'TKJ', '2025-01-14 13:38:24', '2025-01-14 13:38:24', 0),
-(8, 1, 'DKV', '2025-01-14 13:50:49', '2025-01-14 13:50:49', 0);
+(8, 1, 'DKV', '2025-01-14 13:50:49', '2025-01-14 13:50:49', 1737362834),
+(9, 9, 'ELEKTRO', '2025-01-20 08:44:02', '2025-01-20 08:44:02', 1737362644);
 
 -- --------------------------------------------------------
 
@@ -69,8 +70,10 @@ CREATE TABLE `data_kelas` (
 INSERT INTO `data_kelas` (`id`, `id_jurusan`, `nama_kelas`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 4, '10 RPL', '2025-01-14 14:10:17', '2025-01-14 14:10:17', 0),
 (2, 4, '11 RPL', '2025-01-14 14:11:22', '2025-01-14 14:11:22', 0),
-(3, 6, '10 RPL', '2025-01-14 14:11:53', '2025-01-14 14:11:53', 0),
-(4, 7, '10 TKJ', '2025-01-14 14:31:28', '2025-01-14 14:31:28', 1736839958);
+(3, 0, '12 RPL', '2025-01-20 08:42:32', '2025-01-20 08:42:32', 0),
+(4, 7, '10 TKJ', '2025-01-14 14:31:28', '2025-01-14 14:31:28', 1736839958),
+(5, 8, '12', '2025-01-20 07:44:22', '2025-01-20 07:44:22', 1737362544),
+(6, 8, '12 DKV', '2025-01-20 08:43:43', '2025-01-20 08:43:43', 0);
 
 -- --------------------------------------------------------
 
@@ -97,7 +100,10 @@ INSERT INTO `data_tahun_pelajaran` (`id`, `nama_tahun_pelajaran`, `tanggal_mulai
 (1, '2025-2026', '2025-01-01', '2026-01-01', '1', '2025-01-14 11:55:27', '2025-01-14 11:55:27', 0),
 (2, '2026-2027', '2025-01-15', '2025-01-15', '1', '0000-00-00 00:00:00', '2025-01-14 08:14:46', 0),
 (7, '2024-2025', '2025-01-14', '2025-01-14', '1', '2025-01-14 13:37:13', '2025-01-14 13:37:13', 0),
-(8, '2026-2028', '0000-00-00', '0000-00-00', '1', '2025-01-14 13:37:36', '2025-01-14 13:37:36', 1736864511);
+(8, '2026-2028', '0000-00-00', '0000-00-00', '1', '2025-01-14 13:37:36', '2025-01-14 13:37:36', 1736864511),
+(9, '2050-2090', '2025-01-01', '2025-01-16', '1', '2025-01-20 08:44:17', '2025-01-20 08:44:17', 1737362660),
+(10, '3000-8000', '2025-01-01', '2025-01-23', '1', '0000-00-00 00:00:00', '2025-01-20 17:19:31', 0),
+(11, '2025-2026', '2025-01-01', '2026-01-01', '1', '0000-00-00 00:00:00', '2025-01-20 22:21:20', 1737386490);
 
 -- --------------------------------------------------------
 
@@ -120,7 +126,8 @@ CREATE TABLE `harga_biaya` (
 --
 
 INSERT INTO `harga_biaya` (`id`, `tahun_pelajaran_id`, `jenis_biaya_id`, `harga_biaya`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(10, 2, 13, 4000000.00, '2025-01-16 16:38:56', '2025-01-16 16:38:56', 0);
+(10, 2, 13, 4000000.00, '2025-01-16 16:38:56', '2025-01-20 15:30:11', 1737361811),
+(11, 2, 12, 30000.00, '2025-01-20 08:39:57', '2025-01-20 08:39:57', 0);
 
 -- --------------------------------------------------------
 
@@ -142,8 +149,7 @@ CREATE TABLE `jenis_biaya` (
 --
 
 INSERT INTO `jenis_biaya` (`id`, `nama_jenis_biaya`, `status_jenis_biaya`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(12, 'SPP', 1, '2025-01-16 05:08:46', '2025-01-16 06:49:01', 0),
-(13, 'Pendaftaran', 1, '2025-01-16 06:48:51', '2025-01-16 06:48:51', 0);
+(12, 'SPP', 1, '2025-01-16 05:08:46', '2025-01-20 15:10:56', 0);
 
 -- --------------------------------------------------------
 
@@ -165,8 +171,7 @@ CREATE TABLE `jenis_seragam` (
 
 INSERT INTO `jenis_seragam` (`id`, `nama_jenis_seragam`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'Seragam Putih Abu-abu', '2025-01-16 08:52:12', '2025-01-16 13:17:15', 0),
-(4, 'Seragam Batik', '2025-01-16 15:54:10', '2025-01-16 15:54:10', 0),
-(5, 'Seragam Prakerin', '2025-01-16 15:54:32', '2025-01-16 15:54:32', 0);
+(4, 'Seragam Batik', '2025-01-16 15:54:10', '2025-01-16 15:54:10', 0);
 
 -- --------------------------------------------------------
 
@@ -178,7 +183,7 @@ CREATE TABLE `stok_seragam` (
   `id` int NOT NULL,
   `jenis_seragam_id` int NOT NULL,
   `ukuran_seragam` varchar(255) NOT NULL,
-  `stok_seragam` varchar(255) NOT NULL,
+  `stok_seragam` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` int NOT NULL DEFAULT '0'
@@ -189,8 +194,8 @@ CREATE TABLE `stok_seragam` (
 --
 
 INSERT INTO `stok_seragam` (`id`, `jenis_seragam_id`, `ukuran_seragam`, `stok_seragam`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(2, 1, 'M', '90', '2025-01-16 13:16:22', '2025-01-16 13:16:22', 0),
-(3, 1, 'L', '130', '2025-01-16 15:16:18', '2025-01-16 15:16:18', 0);
+(2, 1, 'M', '120', '2025-01-16 13:16:22', '2025-01-20 08:12:43', 0),
+(3, 1, 'L', '130', '2025-01-16 15:16:18', '2025-01-16 15:16:18', 1737360958);
 
 -- --------------------------------------------------------
 
@@ -275,37 +280,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT untuk tabel `data_jurusan`
 --
 ALTER TABLE `data_jurusan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT untuk tabel `data_kelas`
 --
 ALTER TABLE `data_kelas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `data_tahun_pelajaran`
 --
 ALTER TABLE `data_tahun_pelajaran`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT untuk tabel `harga_biaya`
 --
 ALTER TABLE `harga_biaya`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT untuk tabel `jenis_biaya`
 --
 ALTER TABLE `jenis_biaya`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `jenis_seragam`
 --
 ALTER TABLE `jenis_seragam`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT untuk tabel `stok_seragam`

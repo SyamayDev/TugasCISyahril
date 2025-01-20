@@ -19,27 +19,35 @@ $('.addBtn').on('click', function () {
 	$('#modal_' + target).modal('show');
 });
 $('.saveBtn').on('click', function () {
-	let target = $(this).data('target'); 
-	let url = baseClass + '/save_' + target; 
-	let formData = new FormData($('#form_' + target)[0]); 
-	$.ajax({
-		url: url,
-		type: 'POST',
-		data: formData,
-		processData: false,
-		contentType: false,
-		dataType: 'json',
-		success: function (response) {
-			if (response.status) {
-				alert(response.message);
-				$('#modal_' + target).modal('hide');
-				loadTabel(target);
-			} else {
-				alert(response.message);
-			}
-		}
-	});
+    let target = $(this).data('target');
+    let url = baseClass + '/save_' + target;
+    let formData = new FormData($('#form_' + target)[0]);
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function (response) {
+            if (response.status) {
+                alert(response.message);
+                $('#modal_' + target).modal('hide');
+                loadTabel(target);
+            } else {
+                // Reset all error blocks
+                $('.error-block').text('');
+                
+                // Populate errors
+                $.each(response.error, function (key, val) {
+                    $(`#${key}`).siblings('.error-block').text(val);
+                });
+            }
+        }
+    });
 });
+
 function loadTabel(target) {
 	let table = $('#table_' + target);
 	let url = baseClass + '/table_' + target;
@@ -133,3 +141,12 @@ $(document).on('click', '.deleteBtn', function () {
 		}
 	});
 })
+
+    // Reset form and error blocks when modal is closed
+    $(document).on('hidden.bs.modal', '.modal', function () {
+        const $form = $(this).find('form');
+        if ($form.length) {
+            $form[0].reset(); // Reset form inputs
+            $form.find('.error-block').text(''); // Clear error messages
+        }
+    });

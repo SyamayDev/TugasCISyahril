@@ -45,21 +45,20 @@
 							<select class="form-control loadSelect"  data-target="tahun_pelajaran" name="tahun_pelajaran" id="tahun_pelajaran">
 								<option value="">- Pilih Tahun Pelajaran -</option>
 							</select>
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
 						<div class="mb-1">
 							<label for="jurusan" class="form-label chainedSelect" data-target="jurusan" data-parent="tahun_pelajaran" data-url="<?= base_url('kelas/getOption_jurusan') ?>">Nama Jurusan</label>
 							<select class="form-control" name="id_jurusan" id="jurusan">
 								<option value="">- Pilih Jurusan -</option>
 							</select>
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
 						<div class="mb-1">
 							<label for="nama_kelas" class="form-label">Nama Kelas</label>
 							<input type="text" class="form-control" id="nama_kelas" name="nama_kelas" value="">
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
-
 					</form>
 
 					<div>

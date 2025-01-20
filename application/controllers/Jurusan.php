@@ -61,48 +61,58 @@ class Jurusan extends CI_Controller
 
 	public function save_jurusan()
 	{
-
-		$id = $this->input->post('id');
-		$id_tahun_pelajaran = $this->input->post('id_tahun_pelajaran');
-		$data['nama_jurusan'] = $this->input->post('nama_jurusan');
-		$data['id_tahun_pelajaran'] = $this->input->post('id_tahun_pelajaran');
-		$data['created_at'] = date('Y-m-d H:i:s');
-		$data['updated_at'] = date('Y-m-d H:i:s');
-		$data['deleted_at'] = 0;
-
-		if ($data['nama_jurusan']) {
+		$this->load->library('form_validation');
+	
+		// Aturan Validasi
+		$this->form_validation->set_rules('id_tahun_pelajaran', 'Tahun Pelajaran', 'required', [
+			'required' => 'Tahun Pelajaran wajib dipilih.'
+		]);
+		$this->form_validation->set_rules('nama_jurusan', 'Nama Jurusan', 'required|trim|max_length[100]', [
+			'required' => 'Nama Jurusan wajib diisi.',
+			'max_length' => 'Nama Jurusan tidak boleh lebih dari 100 karakter.'
+		]);
+	
+		if ($this->form_validation->run() == FALSE) {
+			// Jika validasi gagal
+			echo json_encode([
+				'status' => false,
+				'error' => $this->form_validation->error_array()
+			]);
+		} else {
+			// Data valid
+			$id = $this->input->post('id');
+			$id_tahun_pelajaran = $this->input->post('id_tahun_pelajaran');
+			$data['nama_jurusan'] = $this->input->post('nama_jurusan');
+			$data['id_tahun_pelajaran'] = $id_tahun_pelajaran;
+			$data['created_at'] = date('Y-m-d H:i:s');
+			$data['updated_at'] = date('Y-m-d H:i:s');
+			$data['deleted_at'] = 0;
+	
+			// Cek Duplikasi
 			$cek = $this->md->cekJurusanDuplicate($data['nama_jurusan'], $id_tahun_pelajaran, $id);
 			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Jurusan sudah ada';
+				echo json_encode([
+					'status' => false,
+					'message' => 'Jurusan sudah ada'
+				]);
 			} else {
-
+				// Simpan atau Update Data
 				if ($id) {
 					$q = $this->md->updateJurusan($id, $data);
-					if ($q) {
-						$ret['status'] = true;
-						$ret['message'] = 'Data berhasil diupdate';
-					} else {
-						$ret['status'] = false;
-						$ret['message'] = 'Data gagal diupdate';
-					}
+					$message = $q ? 'Data berhasil diupdate' : 'Data gagal diupdate';
 				} else {
 					$q = $this->md->saveJurusan($data);
-					if ($q) {
-						$ret['status'] = true;
-						$ret['message'] = 'Data berhasil disimpan';
-					} else {
-						$ret['status'] = false;
-						$ret['message'] = 'Data gagal disimpan';
-					}
+					$message = $q ? 'Data berhasil disimpan' : 'Data gagal disimpan';
 				}
+	
+				echo json_encode([
+					'status' => $q,
+					'message' => $message
+				]);
 			}
-		} else {
-			$ret['status'] = false;
-			$ret['message'] = 'Data gagal disimpan';
 		}
-		echo json_encode($ret);
 	}
+	
 
 	public function delete_jurusan($id)
 	{

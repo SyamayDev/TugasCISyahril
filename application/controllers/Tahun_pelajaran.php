@@ -52,55 +52,66 @@ class Tahun_pelajaran extends CI_Controller
 
 	public function save_tahun_pelajaran()
 	{
-		$id = $this->input->post('id');
-		$data['nama_tahun_pelajaran'] = $this->input->post('nama_tahun_pelajaran');
-		$data['tanggal_mulai'] = $this->input->post('tanggal_mulai');
-		$data['tanggal_akhir'] = $this->input->post('tanggal_akhir');
-		$data['status_tahun_pelajaran'] = $this->input->post('status_tahun_pelajaran');
-		$data['created_at'] = date('Y-m-d H:i:s');
-		$data['updated_at'] = date('Y-m-d H:i:s');
-		$data['deleted_at'] = 0;
-
-		if ($data['nama_tahun_pelajaran']) {
-			$cek = $this->md->cekTahunPelajaranDuplicate($data['nama_tahun_pelajaran'], $id);
-			if ($cek->num_rows() > 0) {
-				$ret['status'] = false;
-				$ret['message'] = 'Tahun Pelajaran sudah ada';
-				$ret['query'] = $this->db->last_query();
-			} else {
-				if ($id) {
-					$q = $this->md->updateTahunPelajaran($id, $data);
-					if ($q) {
-						$ret['status'] = true;
-						$ret['message'] = 'Data berhasil diupdate';
-					} else {
-						$ret['status'] = false;
-						$ret['message'] = 'Data gagal diupdate';
-					}
-				} else {
-					$q = $this->md->saveTahunPelajaran($data);
-					if ($q) {
-						$ret['status'] = true;
-						$ret['message'] = 'Data berhasil disimpan';
-					} else {
-						$ret['status'] = false;
-						$ret['message'] = 'Data gagal disimpan';
-					}
-				}
-			}
+		$this->load->library('form_validation');
+	
+		$this->form_validation->set_rules('nama_tahun_pelajaran', 'Nama Tahun Pelajaran', 'required|trim|max_length[100]', [
+			'required' => 'Nama Tahun Pelajaran wajib diisi.',
+			'max_length' => 'Nama Tahun Pelajaran tidak boleh lebih dari 100 karakter.'
+		]);
+		$this->form_validation->set_rules('tanggal_mulai', 'Tanggal Mulai', 'required|trim', [
+			'required' => 'Tanggal Mulai wajib diisi.'
+		]);
+		$this->form_validation->set_rules('tanggal_akhir', 'Tanggal Akhir', 'required|trim|callback_check_date_range', [
+			'required' => 'Tanggal Akhir wajib diisi.',
+			'check_date_range' => 'Tanggal Akhir harus lebih besar dari Tanggal Mulai.'
+		]);
+		$this->form_validation->set_rules('status_tahun_pelajaran', 'Status Tahun Pelajaran', 'required|trim', [
+			'required' => 'Status Tahun Pelajaran wajib diisi.'
+		]);
+	
+		if ($this->form_validation->run() == FALSE) {
+			echo json_encode([
+				'status' => false,
+				'error' => $this->form_validation->error_array()
+			]);
 		} else {
-			$ret['status'] = false;
-			$ret['message'] = 'Tahun Pelajaran tidak boleh kosong';
+			$data = [
+				'nama_tahun_pelajaran' => $this->input->post('nama_tahun_pelajaran'),
+				'tanggal_mulai' => $this->input->post('tanggal_mulai'),
+				'tanggal_akhir' => $this->input->post('tanggal_akhir'),
+				'status_tahun_pelajaran' => $this->input->post('status_tahun_pelajaran')
+			];
+	
+			$save = $this->md->saveTahunPelajaran($data);
+			echo json_encode([
+				'status' => $save,
+				'message' => $save ? 'Data berhasil disimpan' : 'Data gagal disimpan'
+			]);
 		}
-
-
-		echo json_encode($ret);
 	}
+
+	
+	
+	public function valid_date($date)
+	{
+		$d = DateTime::createFromFormat('Y-m-d', $date);
+		return $d && $d->format('Y-m-d') === $date;
+	}
+	
+	
+	public function check_date_range($tanggal_akhir)
+	{
+		$tanggal_mulai = $this->input->post('tanggal_mulai');
+		if (strtotime($tanggal_akhir) > strtotime($tanggal_mulai)) {
+			return true;
+		}
+		return false;
+	}	
 
 	public function edit_tahun_pelajaran($id)
 	{
 
-		// $id = $this->input->post('id');
+		
 		$q = $this->md->getTahunPelajaranByID($id);
 		if ($q->num_rows() > 0) {
 			$ret = array(
@@ -122,7 +133,7 @@ class Tahun_pelajaran extends CI_Controller
 
 	public function delete_tahun_pelajaran($id)
 	{
-		// $id = $this->input->post('id');
+		
 		$data['deleted_at'] = time();
 		$q = $this->md->updateTahunPelajaran($id, $data);
 		if ($q) {

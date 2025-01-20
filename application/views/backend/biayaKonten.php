@@ -79,7 +79,7 @@
 						<div class="mb-1">
 							<label for="nama_jenis_biaya" class="form-label">Nama Jenis Biaya</label>
 							<input type="text" class="form-control" id="nama_jenis_biaya" name="nama_jenis_biaya" value="">
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
 						<div class="mb-1">
 							<label for="status_jenis_biaya" class="form-label">Status</label>
@@ -88,10 +88,8 @@
 								<option value="1">Aktif</option>
 								<option value="0">Tidak Aktif</option>
 							</select>
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
-
-
 					</form>
 
 					<div>
@@ -128,22 +126,21 @@
 							<select class="form-control loadSelect" data-target="tahun_pelajaran" name="tahun_pelajaran_id" id="tahun_pelajaran_id">
 								<option value="">- Pilih Tahun Pelajaran -</option>
 							</select>
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
 						<div class="mb-1">
 							<label for="jenis_biaya_id" class="form-label">Nama Jenis Biaya</label>
 							<select class="form-control loadSelect" data-target="jenis_biaya" name="jenis_biaya_id" id="jenis_biaya_id">
 								<option value="">- Pilih Jenis Biaya -</option>
 							</select>
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
 						<div class="mb-1">
 							<label for="harga_biaya" class="form-label">Harga</label>
 							<input type="text" class="form-control" name="harga_biaya" id="harga_biaya">
 
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
-
 					</form>
 
 					<div>

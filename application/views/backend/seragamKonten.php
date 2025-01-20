@@ -78,7 +78,7 @@
 						<div class="mb-1">
 							<label for="nama_jenis_seragam" class="form-label">Nama Jenis seragam</label>
 							<input type="text" class="form-control" id="nama_jenis_seragam" name="nama_jenis_seragam" value="">
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
 					</form>
 
@@ -115,11 +115,9 @@
 							<label for="jenis_seragam_id" class="form-label">Jenis Seragam</label>
 							<select class="form-control loadSelect" data-target="jenis_seragam" name="jenis_seragam_id" id="jenis_seragam_id">
 								<option value="">- Pilih Jenis Seragam -</option>
-
 							</select>
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
-
 
 						<div class="mb-1">
 							<label for="ukuran_seragam" class="form-label">Ukuran</label>
@@ -130,15 +128,14 @@
 								<option value="L">L</option>
 								<option value="XL">XL</option>
 							</select>
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
 						<div class="mb-1">
 							<label for="stok_seragam" class="form-label">Stok Seragam</label>
 							<input type="text" class="form-control" name="stok_seragam" id="stok_seragam">
 
-							<div class="error-block"></div>
+							<div class="error-block text-danger"></div>
 						</div>
-
 					</form>
 					<div>
 					</div>

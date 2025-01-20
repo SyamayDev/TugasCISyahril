@@ -45,16 +45,19 @@
                     <div class="mb-3">
                         <label for="nama_tahun_pelajaran" class="form-label">Nama Tahun Pelajaran</label>
                         <input type="text" class="form-control" id="nama_tahun_pelajaran" name="nama_tahun_pelajaran" required>
+                        <div class="error-block text-danger"></div>
                     </div>
 
                     <div class="mb-3">
                         <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
                         <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" required>
+                        <div class="error-block text-danger"></div>
                     </div>
 
                     <div class="mb-3">
                         <label for="tanggal_akhir" class="form-label">Tanggal Akhir</label>
                         <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" required>
+                        <div class="error-block text-danger"></div>
                     </div>
 
                     <div class="mb-3">
@@ -63,6 +66,7 @@
                             <option value="1">Aktif</option>
                             <option value="0">Tidak Aktif</option>
                         </select>
+                        <div class="error-block text-danger"></div>
                     </div>
                 </form>
             </div>
@@ -75,3 +79,4 @@
 </div>
 
 <script src="<?php echo base_url(); ?>public/lib/crud.js"></script>
+

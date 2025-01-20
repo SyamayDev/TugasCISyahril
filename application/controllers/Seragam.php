@@ -48,58 +48,57 @@ class Seragam extends CI_Controller
 		echo json_encode($ret);
 	}
 
-public function save_jenis_seragam()
+
+	public function save_jenis_seragam()
 	{
-		$id = $this->input->post('id');
-		$nama_jenis_seragam = $this->input->post('nama_jenis_seragam');
+		$this->load->library('form_validation');
 	
-		if (empty($nama_jenis_seragam)) {
-			$ret['status'] = false;
-			$ret['message'] = 'Nama Jenis Seragam tidak boleh kosong.';
-			echo json_encode($ret);
-			return;
-		}
+		$this->form_validation->set_rules('nama_jenis_seragam', 'Nama Jenis Seragam', 'required|trim', [
+			'required' => 'Nama Jenis Seragam tidak boleh kosong.'
+		]);
 	
-		$isDuplicate = $this->md->CekDuplicateJenisSeragam($nama_jenis_seragam, $id);
-		if ($isDuplicate) {
-			$ret['status'] = false;
-			$ret['message'] = 'Nama Jenis Seragam sudah ada.';
-			echo json_encode($ret);
-			return;
-		}
-	
-		$data = array(
-			'nama_jenis_seragam' => $nama_jenis_seragam,
-			'updated_at' => date('Y-m-d H:i:s'),
-			'deleted_at' => 0
-		);
-	
-		if ($id) {
-			$q = $this->md->updateJenisSeragam($id, $data);
-			if ($q) {
-				$ret['status'] = true;
-				$ret['message'] = 'Data berhasil diupdate';
-			} else {
-				$ret['status'] = false;
-				$ret['message'] = 'Data gagal diupdate';
-			}
+		if ($this->form_validation->run() == FALSE) {
+			echo json_encode([
+				'status' => false,
+				'error' => $this->form_validation->error_array()
+			]);
 		} else {
-			$data['created_at'] = date('Y-m-d H:i:s');
-			$q = $this->md->saveJenisSeragam($data);
-			if ($q) {
-				$ret['status'] = true;
-				$ret['message'] = 'Data berhasil disimpan';
-			} else {
-				$ret['status'] = false;
-				$ret['message'] = 'Data gagal disimpan';
-			}
-		}
+			$id = $this->input->post('id');
+			$nama_jenis_seragam = $this->input->post('nama_jenis_seragam');
 	
-		echo json_encode($ret);
+			$isDuplicate = $this->md->CekDuplicateJenisSeragam($nama_jenis_seragam, $id);
+			if ($isDuplicate) {
+				echo json_encode([
+					'status' => false,
+					'message' => 'Nama Jenis Seragam sudah ada.'
+				]);
+				return;
+			}
+	
+			$data = [
+				'nama_jenis_seragam' => $nama_jenis_seragam,
+				'updated_at' => date('Y-m-d H:i:s'),
+				'deleted_at' => 0
+			];
+	
+			if ($id) {
+				$q = $this->md->updateJenisSeragam($id, $data);
+				$message = $q ? 'Data berhasil diupdate' : 'Data gagal diupdate';
+			} else {
+				$data['created_at'] = date('Y-m-d H:i:s');
+				$q = $this->md->saveJenisSeragam($data);
+				$message = $q ? 'Data berhasil disimpan' : 'Data gagal disimpan';
+			}
+	
+			echo json_encode([
+				'status' => $q,
+				'message' => $message
+			]);
+		}
 	}
 	
 
-
+	
 	public function edit_jenis_seragam($id)
 	{
 		// $id = $this->input->post('id');
@@ -155,58 +154,67 @@ public function save_jenis_seragam()
 
 	public function save_stok_seragam()
 	{
-		$id = $this->input->post('id');
-		$id_jenis_seragam = trim($this->input->post('jenis_seragam_id'));
-		$ukuran_seragam = trim($this->input->post('ukuran_seragam'));
-		$stok_seragam = trim($this->input->post('stok_seragam'));
+		$this->load->library('form_validation');
 	
-		if (empty($id_jenis_seragam) || empty($ukuran_seragam) || empty($stok_seragam)) {
-			$ret['status'] = false;
-			$ret['message'] = 'Jenis seragam, ukuran seragam, dan stok seragam tidak boleh kosong';
-			echo json_encode($ret);
+		// Aturan validasi
+		$this->form_validation->set_rules('jenis_seragam_id', 'Jenis Seragam', 'required|numeric', [
+			'required' => 'Jenis Seragam tidak boleh kosong.',
+			'numeric' => 'Jenis Seragam tidak valid.'
+		]);
+		$this->form_validation->set_rules('ukuran_seragam', 'Ukuran Seragam', 'required', [
+			'required' => 'Ukuran Seragam tidak boleh kosong.'
+		]);
+		$this->form_validation->set_rules('stok_seragam', 'Stok Seragam', 'required|integer', [
+			'required' => 'Stok Seragam tidak boleh kosong.',
+			'integer' => 'Stok Seragam harus berupa angka.'
+		]);
+	
+		if ($this->form_validation->run() == FALSE) {
+			echo json_encode([
+				'status' => false,
+				'error' => $this->form_validation->error_array()
+			]);
 			return;
 		}
-
+	
+		$id = $this->input->post('id');
+		$id_jenis_seragam = $this->input->post('jenis_seragam_id');
+		$ukuran_seragam = $this->input->post('ukuran_seragam');
+		$stok_seragam = $this->input->post('stok_seragam');
+	
+		// Cek duplikasi
 		$existing = $this->md->getStokSeragamByUnique($id_jenis_seragam, $ukuran_seragam);
 		if ($existing && (!$id || $existing->id != $id)) {
-			$ret['status'] = false;
-			$ret['message'] = 'Data stok seragam dengan jenis dan ukuran yang sama sudah ada';
-			echo json_encode($ret);
+			echo json_encode([
+				'status' => false,
+				'message' => 'Data stok seragam dengan jenis dan ukuran yang sama sudah ada.'
+			]);
 			return;
 		}
 	
-		$data = array(
+		$data = [
 			'jenis_seragam_id' => $id_jenis_seragam,
 			'ukuran_seragam' => $ukuran_seragam,
 			'stok_seragam' => $stok_seragam,
 			'updated_at' => date('Y-m-d H:i:s'),
 			'deleted_at' => 0
-		);
+		];
 	
 		if ($id) {
 			$q = $this->md->updateStokSeragam($id, $data);
-			if ($q) {
-				$ret['status'] = true;
-				$ret['message'] = 'Data berhasil diupdate';
-			} else {
-				$ret['status'] = false;
-				$ret['message'] = 'Data gagal diupdate';
-			}
+			$message = $q ? 'Data berhasil diupdate' : 'Data gagal diupdate';
 		} else {
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$q = $this->md->saveStokSeragam($data);
-	
-			if ($q) {
-				$ret['status'] = true;
-				$ret['message'] = 'Data berhasil disimpan';
-			} else {
-				$ret['status'] = false;
-				$ret['message'] = 'Data gagal disimpan';
-			}
+			$message = $q ? 'Data berhasil disimpan' : 'Data gagal disimpan';
 		}
 	
-		echo json_encode($ret);
+		echo json_encode([
+			'status' => $q,
+			'message' => $message
+		]);
 	}
+	
 	
 	public function edit_stok_seragam($id)
 	{
