@@ -26,21 +26,27 @@ class Kelas extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
-	public function option_tahun_pelajaran()
+
+	public function getOption_tahun_pelajaran()
 	{
 		$q = $this->md->getAllTahunPelajaranNotDeleted();
-		$ret = '<option value="">Pilih Tahun Pelajaran</option>';
+		$opt = '<option value="">Pilih Tahun Pelajaran</option>';
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
-				$ret .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
+				$opt .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
 			}
 		}
-		echo $ret;
+		echo $opt;
 	}
 
-	public function option_jurusan($id)
+	public function getOption_jurusan()
 	{
-
+		$id = $this->input->post('id');
+	
+		// Log ID yang diterima untuk debugging
+		log_message('info', 'ID yang diterima: ' . $id);
+	
+		// Ambil data jurusan berdasarkan ID tahun pelajaran
 		$q = $this->md->getJurusanByTahunPelajaranID($id);
 		$ret = '<option value="">Pilih Jurusan</option>';
 		if ($q->num_rows() > 0) {
@@ -48,9 +54,10 @@ class Kelas extends CI_Controller
 				$ret .= '<option value="' . $row->id . '">' . $row->nama_jurusan . '</option>';
 			}
 		}
+	
 		echo $ret;
-	}
-
+	}	
+	
 	public function table_kelas()
 	{
 		$q = $this->md->getAllKelasNotDeleted();
@@ -73,7 +80,7 @@ class Kelas extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function save()
+	public function save_kelas()
 	{
 
 		$id = $this->input->post('id');
@@ -108,9 +115,9 @@ class Kelas extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function edit()
+	public function edit_kelas($id)
 	{
-		$id = $this->input->post('id');
+		// $id = $this->input->post('id');
 		$q = $this->md->getKelasByID($id);
 		if ($q->num_rows() > 0) {
 			$ret['status'] = true;
@@ -125,9 +132,9 @@ class Kelas extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function delete()
+	public function delete_kelas($id)
 	{
-		$id = $this->input->post('id');
+		// $id = $this->input->post('id');
 		$data['deleted_at'] = time();
 		$q = $this->md->updateKelas($id, $data);
 		if ($q) {

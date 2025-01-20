@@ -48,7 +48,7 @@ class Seragam extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function save_jenis_seragam()
+public function save_jenis_seragam()
 	{
 		$id = $this->input->post('id');
 		$nama_jenis_seragam = $this->input->post('nama_jenis_seragam');
@@ -100,9 +100,9 @@ class Seragam extends CI_Controller
 	
 
 
-	public function edit_jenis_seragam()
+	public function edit_jenis_seragam($id)
 	{
-		$id = $this->input->post('id');
+		// $id = $this->input->post('id');
 		$q = $this->md->getJenisSeragamByID($id);
 		if ($q->num_rows() > 0) {
 			$ret['status'] = true;
@@ -117,9 +117,10 @@ class Seragam extends CI_Controller
 	}
 
 
-	public function delete_jenis_seragam()
+
+	public function delete_jenis_seragam($id)
 	{
-		$id = $this->input->post('id');
+		// $id = $this->input->post('id');
 		$q = $this->md->deleteJenisSeragam($id);
 		if ($q) {
 			$ret['status'] = true;
@@ -207,9 +208,9 @@ class Seragam extends CI_Controller
 		echo json_encode($ret);
 	}
 	
-	public function edit_stok_seragam()
+	public function edit_stok_seragam($id)
 	{
-		$id = $this->input->post('id');
+		//$id = $this->input->post('id');
 		$q = $this->md->getStokSeragamByID($id);
 		if ($q->num_rows() > 0) {
 			$ret['status'] = true;
@@ -217,15 +218,16 @@ class Seragam extends CI_Controller
 			$ret['message'] = '';
 		} else {
 			$ret['status'] = false;
-			$ret['data'] = [];
+			$ret['query'] = 	$this->db->last_query();
 			$ret['message'] = 'Data tidak tersedia';
+
 		}
 		echo json_encode($ret);
 	}
 	
-	public function delete_stok_seragam()
+	public function delete_stok_seragam($id)
 	{
-		$id = $this->input->post('id');
+		// $id = $this->input->post('id');
 		$data['deleted_at'] = time();
 		$q = $this->md->updateStokSeragam($id, $data);
 		if ($q) {
@@ -238,7 +240,7 @@ class Seragam extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function getOptionJenisSeragam()
+	public function getOption_jenis_seragam()
 	{
 		$q = $this->md->getAllJenisSeragam();
 		$opt = '<option value="">-- Pilih Jenis Biaya --</option>';

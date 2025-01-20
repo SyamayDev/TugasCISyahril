@@ -1,132 +1,135 @@
 $(document).ready(function () {
-    let targets = ['jenis_biaya', 'harga_biaya', 'tahun_pelajaran', 'data_jurusan', 'data_kelas', 'jenis_seragam', 'stok_seragam'];
-    targets.forEach(target => initTabel(target));
-
-    $('.btnTambah').on('click', function () {
-        let target = $(this).data('target');
-        resetForm(target);
-        $('#modal_' + target).modal('show');
-    });
-
-    $('.saveBtn').on('click', function () {
-        let target = $(this).data('target');
-        saveData(target);
-    });
-
-    $(document).on('click', '.btnHapus', function () {
-        let target = $(this).data('target');
-        let id = $(this).data('id');
-        deleteData(id, target);
-    });
-
-    $(document).on('click', '.btnEdit', function () {
-        let target = $(this).data('target');
-        let id = $(this).data('id');
-        editData(id, target);
-    });
+	
+	
+	$('.loadSelect').each(function () {
+		let target = $(this).data('target');
+		let url = baseClass + '/getOption_' + target;
+		$(this).load(url);
+	})
+	$('.table').each(function () {
+		let target = $(this).data('target');
+		loadTabel(target);
+	});
+});
+$('.addBtn').on('click', function () {
+	let target = $(this).data('target');
+	let form = '#form_' + target;
+	$(form + ' input[type = "hidden"]').val('');
+	$(form)[0].reset();
+	$('#modal_' + target).modal('show');
+});
+$('.saveBtn').on('click', function () {
+	let target = $(this).data('target'); 
+	let url = baseClass + '/save_' + target; 
+	let formData = new FormData($('#form_' + target)[0]); 
+	$.ajax({
+		url: url,
+		type: 'POST',
+		data: formData,
+		processData: false,
+		contentType: false,
+		dataType: 'json',
+		success: function (response) {
+			if (response.status) {
+				alert(response.message);
+				$('#modal_' + target).modal('hide');
+				loadTabel(target);
+			} else {
+				alert(response.message);
+			}
+		}
+	});
+});
+function loadTabel(target) {
+	let table = $('#table_' + target);
+	let url = baseClass + '/table_' + target;
+	let tr = '';
+	let th = '';
+	$.ajax({
+		url: url,
+		type: 'GET',
+		dataType: 'json',
+		success: function (response) {
+			if (response.status) {
+				generateTable(response.data, target);
+			} else {
+				tr = $('<tr>');
+				table.find('tbody').html('');
+				th = table.find('thead th').length;
+				tr.append('<td colspan="' + th + '"> <h4>' + response.message + '</h4></td>');
+			}
+		}
+	});
+}
+function generateTable(data, target) {
+	const $table = $(`#table_${target}`);
+	const $thead = $table.find('thead th');
+	const $tbody = $table.find('tbody');
+	let rows = "";
+	data.forEach((item, index) => {
+		let row = "<tr>";
+		$thead.each(function () {
+			const key = $(this).data('key');
+			if (key === "no") {
+				
+				row += `<td style="${$(this).attr('style')}">${index + 1}</td>`;
+			} else if (key === "btn_aksi") {
+				
+				row += `
+					<td style="${$(this).attr('style')}">
+						<button class="btn btn-primary btn-sm editBtn" data-value="${item.id}" data-target="${target}" >Edit</button>
+						<button class="btn btn-danger btn-sm deleteBtn" data-value="${item.id}" data-target="${target}" >Delete</button>
+					</td>`;
+			} else {
+				
+				row += `<td style="${$(this).attr('style')}">${item[key] || '-'}</td>`;
+			}
+		});
+		row += "</tr>";
+		rows += row;
+	});
+	$tbody.html(rows);
+}
+$(document).on('click', '.editBtn', function () {
+	let target = $(this).data('target');
+	let id = $(this).data('value');
+	console.log(target);
+	let url = baseClass + '/edit_' + target + '/' + id;
+	let form = '#form_' + target;
+	$.ajax({
+		url: url,
+		type: 'GET',
+		dataType: 'json',
+		success: function (response) {
+			if (response.status) {
+				$.each(response.data, function (i, item) {
+					$(form + ' [name="' + i + '"]').val(item);
+				});
+				$('#modal_' + target).modal('show');
+			} else {
+				alert(response.message);
+			}
+		}
+	});
 });
 
-function resetForm(target) {
-    $('#form_' + target)[0].reset();
-    $('#form_' + target).find('.is-invalid').removeClass('is-invalid');
-    $('#' + target + 'Id').val('');
-}
 
-
-function initTabel(target) {
-    let tableBody = $('#tabel_' + target + ' tbody');
-    $.ajax({
-        url: base_url + target + '/get_' + target,
-        type: 'GET',
-        dataType: 'json',
-        success: function (response) {
-            tableBody.empty();
-            if (response.status) {
-                response.data.forEach(item => {
-                    let row = `<tr>`;
-                    Object.values(item).forEach(value => {
-                        row += `<td>${value}</td>`;
-                    });
-                    row += `
-                        <td>
-                            <button class="btn btn-primary btnEdit" data-id="${item.id}" data-target="${target}">Edit</button>
-                            <button class="btn btn-danger btnHapus" data-id="${item.id}" data-target="${target}">Hapus</button>
-                        </td>
-                    `;
-                    row += `</tr>`;
-                    tableBody.append(row);
-                });
-            } else {
-                alert(response.message);
-            }
-        }
-    });
-}
-
-
-function saveData(target) {
-    let formData = new FormData($('#form_' + target)[0]);
-    $.ajax({
-        url: base_url + target + '/save_' + target,
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-        success: function (response) {
-            if (response.status) {
-                alert(response.message);
-                $('#modal_' + target).modal('hide');
-                initTabel(target);
-            } else {
-                alert(response.message);
-                highlightFormErrors(response.errors, target);
-            }
-        }
-    });
-}
-
-function editData(id, target) {
-    $.ajax({
-        url: base_url + target + '/get_' + target + '/' + id,
-        type: 'GET',
-        dataType: 'json',
-        success: function (response) {
-            if (response.status) {
-                let data = response.data;
-                for (let key in data) {
-                    $(`#${target}${key}`).val(data[key]);
-                }
-                $('#modal_' + target).modal('show');
-            } else {
-                alert(response.message);
-            }
-        }
-    });
-}
-
-function deleteData(id, target) {
-    if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-        $.ajax({
-            url: base_url + target + '/delete_' + target + '/' + id,
-            type: 'POST',
-            dataType: 'json',
-            success: function (response) {
-                if (response.status) {
-                    alert(response.message);
-                    initTabel(target);
-                } else {
-                    alert(response.message);
-                }
-            }
-        });
-    }
-}
-
-function highlightFormErrors(errors, target) {
-    for (let field in errors) {
-        let input = $(`#${target}${field}`);
-        input.addClass('is-invalid');
-        input.next('.invalid-feedback').text(errors[field]);
-    }
-}
+$(document).on('click', '.deleteBtn', function () {
+	let target = $(this).data('target');
+	let id = $(this).data('value');
+	let url = baseClass + '/delete_' + target + '/' + id;
+	let form = '#form_' + target;
+	$.ajax({
+		url: url,
+		type: 'GET',
+		dataType: 'json',
+		success: function (response) {
+			if (response.status) {
+				alert(response.message);
+				loadTabel(target);
+			} else {
+				alert(response.message);
+			}
+		}
+	});
+})

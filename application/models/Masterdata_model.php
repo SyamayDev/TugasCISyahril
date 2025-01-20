@@ -95,7 +95,7 @@ class Masterdata_model extends CI_Model
 		$this->db->where('id_tahun_pelajaran', $id);
 		return $this->db->get($this->tableJurusan);
 	}
-
+	
 	public function cekJurusanDuplicate($nama_jurusan, $id_tahun_pelajaran, $id)
 	{
 		if ($id) {
@@ -297,9 +297,9 @@ class Masterdata_model extends CI_Model
 	}
 	public function getJenisSeragamByID($id)
 	{
-		$this->db->where('id', $id);
-		return $this->db->get($this->tableJenisSeragam);
+		return $this->db->get_where('jenis_seragam', ['id' => $id, 'deleted_at' => 0]);
 	}
+	
 	public function CekDuplicateJenisSeragam($nama_jenis_seragam, $id = null)
 {
     $this->db->where('nama_jenis_seragam', $nama_jenis_seragam);
@@ -336,7 +336,6 @@ class Masterdata_model extends CI_Model
 		])->row();
 	}
 	
-
 
 	public function saveStokSeragam($data)
 	{

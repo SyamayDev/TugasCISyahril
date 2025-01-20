@@ -236,6 +236,8 @@
 			$('#username').val('');
 			$('#password').val('');
 		}
+
+		
 	</script>
 </body>
 

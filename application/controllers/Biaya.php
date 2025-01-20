@@ -101,9 +101,9 @@ class Biaya extends CI_Controller
 		echo json_encode($ret);
 	}
 	
-	public function edit_jenis_biaya()
+	public function edit_jenis_biaya($id)
 	{
-		$id = $this->input->post('id');
+		// $id = $this->input->post('id');
 		$q = $this->md->getJenisBiayaByID($id);
 		if ($q->num_rows() > 0) {
 			$ret['status'] = true;
@@ -119,9 +119,9 @@ class Biaya extends CI_Controller
 	
 
 
-	public function delete_jenis_biaya()
+	public function delete_jenis_biaya($id)
 	{
-		$id = $this->input->post('id');
+		// $id = $this->input->post('id');
 		$q = $this->md->deleteJenisBiaya($id);
 		if ($q) {
 			$ret['status'] = true;
@@ -147,7 +147,7 @@ class Biaya extends CI_Controller
 			$ret['message'] = '';
 		} else {
 			$ret['status'] = false;
-			$ret['data'] = [];
+			$ret['data'] = 	$this->db->last_query();
 			$ret['message'] = 'Data tidak tersedia';
 		}
 		echo json_encode($ret);
@@ -215,9 +215,9 @@ class Biaya extends CI_Controller
 	}
 	
 
-	public function edit_harga_biaya()
+	public function edit_harga_biaya($id)
 	{
-		$id = $this->input->post('id');
+		// $id = $this->input->post('id');
 		$q = $this->md->getHargaBiayaByID($id);
 		if ($q->num_rows() > 0) {
 			$ret['status'] = true;
@@ -232,10 +232,9 @@ class Biaya extends CI_Controller
 	}
 	
 	
-	
-	public function delete_harga_biaya()
+	public function delete_harga_biaya($id)
 	{
-		$id = $this->input->post('id');
+		// $id = $this->input->post('id');
 		$data['deleted_at'] = time();
 		$q = $this->md->updateHargaBiaya($id, $data);
 		if ($q) {
@@ -248,7 +247,7 @@ class Biaya extends CI_Controller
 		echo json_encode($ret);
 	}
 
-	public function getOptionJenisBiayaAktif()
+	public function getOption_jenis_biaya()
 	{
 		$q = $this->md->getJenisBiayaAktif();
 		$opt = '<option value="">-- Pilih Jenis Biaya --</option>';
@@ -260,7 +259,7 @@ class Biaya extends CI_Controller
 		echo $opt;
 	}
 
-	public function getOptionTahunPelajaran()
+	public function getOption_tahun_pelajaran()
 	{
 		$q = $this->md->getAllTahunPelajaranNotDeleted();
 		$opt = '<option value="">-- Pilih Tahun Pelajaran --</option>';
