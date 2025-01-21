@@ -113,10 +113,10 @@ function generateTable(data, table) {
 
 
 $(document).on('click', '.editBtn', function () {
-	let target = $(this).data('target');
+    let target = $('#table_pendaftaran_awal_kelas').data('aksi');
 	let id = $(this).data('value');
 	console.log(target);
-	let url = baseClass + '/edit_' + target + '/' + id;
+    let url = baseClass + '/edit_' + target + '/' + id;
 	let form = '#form_' + target;
 	$.ajax({
 		url: url,
@@ -130,6 +130,7 @@ $(document).on('click', '.editBtn', function () {
 				$('#modal_' + target).modal('show');
 			} else {
 				alert(response.message);
+                loadTabel(target);
 			}
 		}
 	});
@@ -138,7 +139,7 @@ $(document).on('click', '.editBtn', function () {
 
 
 $(document).on('click', '.deleteBtn', function () {
-	let target = $(this).data('target');
+    let target = $('#table_pendaftaran_awal_kelas').data('aksi');
 	let id = $(this).data('value');
 	let url = baseClass + '/delete_' + target + '/' + id;
 	let form = '#form_' + target;
@@ -152,6 +153,7 @@ $(document).on('click', '.deleteBtn', function () {
 				loadTabel(target);
 			} else {
 				alert(response.message);
+                loadTabel(target);
 			}
 		}
 	});

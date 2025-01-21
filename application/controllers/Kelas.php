@@ -87,9 +87,7 @@ class Kelas extends CI_Controller
 		$this->form_validation->set_rules('tahun_pelajaran', 'Nama Tahun Pelajaran', 'required', [
 			'required' => 'Nama Tahun Pelajaran wajib dipilih.'
 		]);
-		$this->form_validation->set_rules('jurusan', 'Nama Jurusan', 'required', [
-			'required' => 'Nama Jurusan wajib dipilih.'
-		]);
+
 		$this->form_validation->set_rules('nama_kelas', 'Nama Kelas', 'required|trim|max_length[100]', [
 			'required' => 'Nama Kelas wajib diisi.',
 			'max_length' => 'Nama Kelas tidak boleh lebih dari 100 karakter.'

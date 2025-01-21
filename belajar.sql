@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 20 Jan 2025 pada 15.29
+-- Waktu pembuatan: 21 Jan 2025 pada 22.11
 -- Versi server: 8.0.30
 -- Versi PHP: 7.4.33
 
@@ -59,7 +59,7 @@ CREATE TABLE `data_kelas` (
   `id_jurusan` int NOT NULL,
   `nama_kelas` varchar(100) NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL,
   `deleted_at` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -68,12 +68,9 @@ CREATE TABLE `data_kelas` (
 --
 
 INSERT INTO `data_kelas` (`id`, `id_jurusan`, `nama_kelas`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 4, '10 RPL', '2025-01-14 14:10:17', '2025-01-14 14:10:17', 0),
-(2, 4, '11 RPL', '2025-01-14 14:11:22', '2025-01-14 14:11:22', 0),
-(3, 0, '12 RPL', '2025-01-20 08:42:32', '2025-01-20 08:42:32', 0),
-(4, 7, '10 TKJ', '2025-01-14 14:31:28', '2025-01-14 14:31:28', 1736839958),
-(5, 8, '12', '2025-01-20 07:44:22', '2025-01-20 07:44:22', 1737362544),
-(6, 8, '12 DKV', '2025-01-20 08:43:43', '2025-01-20 08:43:43', 0);
+(1, 4, '10 RPL', '2025-01-21 08:17:32', '2025-01-21 08:17:32', 0),
+(2, 7, '10 TKJ', '2025-01-21 19:41:16', '2025-01-21 19:41:16', 0),
+(3, 8, '11 DKV', '2025-01-21 20:39:43', '2025-01-21 20:39:43', 0);
 
 -- --------------------------------------------------------
 
@@ -176,6 +173,58 @@ INSERT INTO `jenis_seragam` (`id`, `nama_jenis_seragam`, `created_at`, `updated_
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `pendaftaran_awal`
+--
+
+CREATE TABLE `pendaftaran_awal` (
+  `id` int NOT NULL,
+  `id_jurusan` int NOT NULL,
+  `id_tahun_pelajaran` int NOT NULL,
+  `id_kelas` int NOT NULL,
+  `nama_kelas` varchar(100) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` int DEFAULT '0',
+  `nama_siswa` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nik` varchar(20) NOT NULL,
+  `agama` varchar(50) NOT NULL,
+  `nisn` varchar(20) NOT NULL,
+  `jenis_kelamin` enum('Laki-laki','Perempuan') NOT NULL,
+  `tempat_lahir` varchar(50) NOT NULL,
+  `tanggal_lahir` date NOT NULL,
+  `alamat` text NOT NULL,
+  `no_telepon` varchar(15) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `asal_sekolah` varchar(100) NOT NULL,
+  `nama_ayah` varchar(100) DEFAULT NULL,
+  `nama_ibu` varchar(100) DEFAULT NULL,
+  `no_telepon_ayah` varchar(15) DEFAULT NULL,
+  `no_telepon_ibu` varchar(15) DEFAULT NULL,
+  `pekerjaan_ayah` varchar(50) DEFAULT NULL,
+  `pekerjaan_ibu` varchar(50) DEFAULT NULL,
+  `nama_wali` varchar(100) DEFAULT NULL,
+  `no_telepon_wali` varchar(15) DEFAULT NULL,
+  `pekerjaan_wali` varchar(50) DEFAULT NULL,
+  `alamat_wali` text NOT NULL,
+  `sumber_informasi` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data untuk tabel `pendaftaran_awal`
+--
+
+INSERT INTO `pendaftaran_awal` (`id`, `id_jurusan`, `id_tahun_pelajaran`, `id_kelas`, `nama_kelas`, `created_at`, `updated_at`, `deleted_at`, `nama_siswa`, `nik`, `agama`, `nisn`, `jenis_kelamin`, `tempat_lahir`, `tanggal_lahir`, `alamat`, `no_telepon`, `email`, `asal_sekolah`, `nama_ayah`, `nama_ibu`, `no_telepon_ayah`, `no_telepon_ibu`, `pekerjaan_ayah`, `pekerjaan_ibu`, `nama_wali`, `no_telepon_wali`, `pekerjaan_wali`, `alamat_wali`, `sumber_informasi`) VALUES
+(20, 4, 1, 1, '', '2025-01-21 20:30:28', '2025-01-22 04:32:54', 1737495174, 'adaff', '1234567890123456', 'Islam', '1234567890', 'Laki-laki', 'Medan', '2222-02-22', 'tenajd', '082257401010', 'syahrilmaymubdi2505@gmail.com', 'jbsdsk', 'fsssds', 'sdsdsd', '008977778887', '008977778898', 'hjbjkbj', 'sdsds', 'sdsds', '008977778888', 'adsasas', 'adsdssd', 'kerabat'),
+(21, 0, 1, 0, '', '2025-01-21 21:10:38', '2025-01-22 04:56:37', 1737496597, 'Syahril', '1234567890123456', 'Islam', '1234567890', 'Laki-laki', 'Medan', '2222-02-22', 'tenajd', '082257401010', 'syahrilmaymubdi2505@gmail.com', 'jbsdsk', 'fsssds', 'sdsdsd', '008977778887', '008977778898', 'hjbjkbj', 'sdsds', 'sdsds', '008977778888', 'adsasas', 'adsdssd', 'kerabat'),
+(22, 0, 1, 0, '', '2025-01-21 21:12:18', '2025-01-22 04:56:39', 1737496599, 'Musang', '1234567890123456', 'Islam', '1234567890', 'Laki-laki', 'Medan', '2222-02-22', 'tenajd', '082257401010', 'syahrilmaymubdi2505@gmail.com', 'jbsdsk', 'fsssds', 'sdsdsd', '008977778887', '008977778898', 'hjbjkbj', 'sdsds', 'sdsds', '008977778888', 'adsasas', 'adsdssd', 'kerabat'),
+(23, 0, 2, 0, '', '2025-01-21 21:21:22', '2025-01-22 04:56:44', 1737496604, 'orang', '1234567890123456', 'Islam', '1234567890', 'Laki-laki', 'Medan', '2222-02-22', 'tenajd', '082257401010', 'syahrilmaymubdi2505@gmail.com', 'jbsdsk', 'fsssds', 'sdsdsd', '008977778887', '008977778898', 'hjbjkbj', 'sdsds', 'sdsds', '008977778888', 'adsasas', 'adsdssd', 'kerabat'),
+(24, 7, 2, 2, '', '2025-01-21 21:22:05', '2025-01-22 05:03:38', 1737497018, 'Mahmud', '1234567890123456', 'Islam', '1234567890', 'Laki-laki', 'Medan', '2222-02-22', 'Jl SetiaBudi', '082257401010', 'syahrilmaymubdi2505@gmail.com', 'Demak', 'fsssds', 'sdsdsd', '008977778887', '008977778898', 'hjbjkbj', 'sdsds', 'sdsds', '008977778888', 'adsasas', 'adsdssd', 'kerabat'),
+(25, 4, 1, 1, '', '2025-01-21 21:43:49', '2025-01-21 21:43:49', 0, 'Syahril May Mubdi', '1234567890123456', 'Islam', '1234567890', 'Laki-laki', 'Medan', '2008-05-25', 'Jl. Besar Tembung No 13', '082267403010', 'syahrilmaymubdi2505@gmail.com', 'SMP NEGERI 6 MEDAN', 'Ganteng', 'Cantik', '082304364205', '082304364200', 'Wirausaha', 'Ibu Rumah Tangga', 'Amelia', '082304364000', 'Polwan', 'Jl.Besar Tembung No 13', 'kerabat'),
+(26, 7, 2, 2, '', '2025-01-21 22:10:20', '2025-01-21 22:10:20', 0, 'WIdono', '1122334455123456', 'Islam', '1233567890', 'Laki-laki', 'Medan', '2010-02-22', 'Jl. Krakatau', '082278987865', 'widonowibowo22@gmail.com', 'SMP Al Washliyah Gedung Johor', 'malik', 'citra', '082278987845', '082278987812', 'Pilot', 'Pramugari', 'Ilham Kurniawan', '082278987669', 'Polisi', 'Jl. Balai Desa', 'sosmed');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `stok_seragam`
 --
 
@@ -261,6 +310,12 @@ ALTER TABLE `jenis_seragam`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeks untuk tabel `pendaftaran_awal`
+--
+ALTER TABLE `pendaftaran_awal`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `stok_seragam`
 --
 ALTER TABLE `stok_seragam`
@@ -286,7 +341,7 @@ ALTER TABLE `data_jurusan`
 -- AUTO_INCREMENT untuk tabel `data_kelas`
 --
 ALTER TABLE `data_kelas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `data_tahun_pelajaran`
@@ -311,6 +366,12 @@ ALTER TABLE `jenis_biaya`
 --
 ALTER TABLE `jenis_seragam`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT untuk tabel `pendaftaran_awal`
+--
+ALTER TABLE `pendaftaran_awal`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT untuk tabel `stok_seragam`
