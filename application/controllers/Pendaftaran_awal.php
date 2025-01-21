@@ -310,7 +310,7 @@ if ($this->form_validation->run() == FALSE) {
         $siswa_updated = $this->Pendaftaran_model->updatePendaftaranAwal($id, $data_siswa);
         if ($siswa_updated) {
             $ret['status'] = true;
-            $ret['message'] = 'Data siswa berhasil diperbarui';
+            $ret['message'] = 'Data siswa berhasil diperbarui, silahkan refresh halaman';
         } else {
             $ret['status'] = false;
             $ret['message'] = 'Gagal memperbarui data siswa';
@@ -321,7 +321,7 @@ if ($this->form_validation->run() == FALSE) {
         $id = $this->Pendaftaran_model->savePendaftaranAwal($data_siswa);
         if ($id) {
             $ret['status'] = true;
-            $ret['message'] = 'Data siswa berhasil disimpan';
+            $ret['message'] = 'Data siswa berhasil disimpan, silahkan refresh halaman';
         } else {
             $ret['status'] = false;
             $ret['message'] = 'Data siswa gagal disimpan';
@@ -365,7 +365,7 @@ if ($this->form_validation->run() == FALSE) {
         $q = $this->Pendaftaran_model->deletePendaftaranAwal($id, $data);
         if ($q) {
             $ret['status'] = true;
-            $ret['message'] = 'Data berhasil dihapus';
+            $ret['message'] = 'Data berhasil dihapus, silahkan refresh halaman';
         } else {
             $ret['status'] = false;
             $ret['message'] = 'Data gagal dihapus';
