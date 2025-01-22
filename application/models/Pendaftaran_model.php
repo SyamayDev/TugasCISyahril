@@ -81,4 +81,15 @@ class Pendaftaran_model extends CI_Model
                           ->count_all_results('data_kelas_siswa') + 1;
         return sprintf('%s-%s-%04d', str_replace('/', '', $tahun_pelajaran), strtoupper($jurusan), $count);
     }
+
+    public function checkDuplicate($field, $value, $exclude_id = null)
+    {
+        $query = $this->db
+            ->where($field, $value)
+            ->where('id !=', $exclude_id)
+            ->get($this->tablePendaftaranAwal); // Menggunakan $this->tablePendaftaranAwal agar konsisten
+    
+        return $query->num_rows() > 0;
+    }
+    
 }

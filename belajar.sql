@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 21 Jan 2025 pada 22.11
+-- Waktu pembuatan: 22 Jan 2025 pada 00.29
 -- Versi server: 8.0.30
 -- Versi PHP: 7.4.33
 
@@ -220,7 +220,7 @@ INSERT INTO `pendaftaran_awal` (`id`, `id_jurusan`, `id_tahun_pelajaran`, `id_ke
 (23, 0, 2, 0, '', '2025-01-21 21:21:22', '2025-01-22 04:56:44', 1737496604, 'orang', '1234567890123456', 'Islam', '1234567890', 'Laki-laki', 'Medan', '2222-02-22', 'tenajd', '082257401010', 'syahrilmaymubdi2505@gmail.com', 'jbsdsk', 'fsssds', 'sdsdsd', '008977778887', '008977778898', 'hjbjkbj', 'sdsds', 'sdsds', '008977778888', 'adsasas', 'adsdssd', 'kerabat'),
 (24, 7, 2, 2, '', '2025-01-21 21:22:05', '2025-01-22 05:03:38', 1737497018, 'Mahmud', '1234567890123456', 'Islam', '1234567890', 'Laki-laki', 'Medan', '2222-02-22', 'Jl SetiaBudi', '082257401010', 'syahrilmaymubdi2505@gmail.com', 'Demak', 'fsssds', 'sdsdsd', '008977778887', '008977778898', 'hjbjkbj', 'sdsds', 'sdsds', '008977778888', 'adsasas', 'adsdssd', 'kerabat'),
 (25, 4, 1, 1, '', '2025-01-21 21:43:49', '2025-01-21 21:43:49', 0, 'Syahril May Mubdi', '1234567890123456', 'Islam', '1234567890', 'Laki-laki', 'Medan', '2008-05-25', 'Jl. Besar Tembung No 13', '082267403010', 'syahrilmaymubdi2505@gmail.com', 'SMP NEGERI 6 MEDAN', 'Ganteng', 'Cantik', '082304364205', '082304364200', 'Wirausaha', 'Ibu Rumah Tangga', 'Amelia', '082304364000', 'Polwan', 'Jl.Besar Tembung No 13', 'kerabat'),
-(26, 7, 2, 2, '', '2025-01-21 22:10:20', '2025-01-21 22:10:20', 0, 'WIdono', '1122334455123456', 'Islam', '1233567890', 'Laki-laki', 'Medan', '2010-02-22', 'Jl. Krakatau', '082278987865', 'widonowibowo22@gmail.com', 'SMP Al Washliyah Gedung Johor', 'malik', 'citra', '082278987845', '082278987812', 'Pilot', 'Pramugari', 'Ilham Kurniawan', '082278987669', 'Polisi', 'Jl. Balai Desa', 'sosmed');
+(26, 0, 2, 0, '', '2025-01-21 22:10:20', '2025-01-22 07:27:47', 1737505667, 'Budiono', '1122334455123456', 'Islam', '1233567890', 'Laki-laki', 'Medan', '2010-02-22', 'Jl. Krakatau', '082278987865', 'widonowibowo22@gmail.com', 'SMP Al Washliyah Gedung Johor', 'malik', 'citra', '082278987845', '082278987812', 'Pilot', 'Pramugari', 'Ilham Kurniawan', '082278987669', 'Polisi', 'Jl. Balai Desa', 'sosmed');
 
 -- --------------------------------------------------------
 

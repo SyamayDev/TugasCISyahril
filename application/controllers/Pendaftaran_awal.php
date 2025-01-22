@@ -274,6 +274,10 @@ if ($this->form_validation->run() == FALSE) {
     ]);
 } else {
     $id = $this->input->post('id');
+    $email = $this->input->post('email');
+    $nik = $this->input->post('nik');
+    $nisn = $this->input->post('nisn');
+    $nama_siswa = $this->input->post('nama_siswa');
     $data_siswa = array(    
         'id_tahun_pelajaran' => $this->input->post('id_tahun_pelajaran'),
         'id_jurusan' => $this->input->post('id_jurusan'),
@@ -303,7 +307,26 @@ if ($this->form_validation->run() == FALSE) {
         'alamat_wali' => $this->input->post('alamat_wali'),
         'sumber_informasi' => $this->input->post('sumber_informasi')
     );
+   
+    // Cek duplikasi data
+    if ($this->Pendaftaran_model->checkDuplicate('email', $email, $id)) {
+        echo json_encode(['status' => false, 'message' => 'Email sudah terdaftar.']);
+        return;
+    }
+    if ($this->Pendaftaran_model->checkDuplicate('nik', $nik, $id)) {
+        echo json_encode(['status' => false, 'message' => 'NIK sudah terdaftar.']);
+        return;
+    }
+    if ($this->Pendaftaran_model->checkDuplicate('nisn', $nisn, $id)) {
+        echo json_encode(['status' => false, 'message' => 'NISN sudah terdaftar.']);
+        return;
+    }
+    if ($this->Pendaftaran_model->checkDuplicate('nama_siswa', $nama_siswa, $id)) {
+        echo json_encode(['status' => false, 'message' => 'Nama siswa sudah terdaftar.']);
+        return;
+    }
 
+    
     if (!empty($id)) {
         // Jika ada ID, berarti ini adalah update
         $data_siswa['updated_at'] = date('Y-m-d H:i:s'); // Pastikan waktu update diperbarui

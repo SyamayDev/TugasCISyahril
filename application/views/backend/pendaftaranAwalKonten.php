@@ -115,6 +115,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            
             <!-- Body -->
             <div class="modal-body">
                 <form id="form_pendaftaran_awal">
@@ -155,12 +156,12 @@
                                 <div class="form-group">
                                     <label for="nama_siswa">Nama Siswa</label>
                                     <input type="text" class="form-control" id="nama_siswa" name="nama_siswa" required>
-                                    <div class="error-block text-danger"></div>
+                                    <div id="error-nama" class="error-block text-danger"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="nik">NIK</label>
                                     <input type="text" class="form-control" id="nik" name="nik" required>
-                                    <div class="error-block text-danger"></div>
+                                    <div id="error-nik" class="error-block text-danger"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="agama">Agama</label>
@@ -170,7 +171,7 @@
                                 <div class="form-group">
                                     <label for="nisn">NISN</label>
                                     <input type="text" class="form-control" id="nisn" name="nisn" required>
-                                    <div class="error-block text-danger"></div>
+                                    <div id="error-nisn" class="error-block text-danger"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="jenis_kelamin">Jenis Kelamin</label>
@@ -198,7 +199,7 @@
                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control" id="email" name="email" required>
-                                    <div class="error-block text-danger"></div>
+                                    <div id="error-email" class="error-block text-danger"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="no_telepon">No Telepon</label>
@@ -289,15 +290,65 @@
                 </form>
             </div>
             <!-- Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary saveBtn" data-target="pendaftaran_awal">Simpan</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            <div class="modal-footer" style="display: flex; flex-direction: column; align-items: center;">
+                <!-- Pesan Error -->
+                <div id="global-error" class="text-danger text-center mb-3" 
+                    style="width: 100%; text-align: center; margin-bottom: 1rem; font-weight: bold; display: none;">
+                </div>
+                <!-- Tombol -->
+                <div class="d-flex justify-content-between w-100" 
+                    style="display: flex; justify-content: center; gap: 1rem; width: 100%;">
+                    <button type="button" class="btn btn-primary saveBtn" 
+                            data-target="pendaftaran_awal" 
+                            style="margin: 0 0.5rem;">
+                        Simpan
+                    </button>
+                    <button type="button" class="btn btn-secondary" 
+                            data-dismiss="modal" 
+                            style="margin: 0 0.5rem;">
+                        Tutup
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+
+$('#form_pendaftaran_awal').submit(function (e) {
+    e.preventDefault();
+
+    // Bersihkan error sebelumnya
+    $('.error-block').html('');
+    $('#global-error').html('').show();
+
+    $.ajax({
+        url: $(this).attr('action'), // URL dari atribut action pada form
+        method: $(this).attr('method'), // Metode dari atribut method pada form
+        data: $(this).serialize(), // Serialisasi data form
+        dataType: 'json', // Response diharapkan dalam format JSON
+        success: function (response) {
+            if (response.status) {
+                // Jika berhasil, tampilkan pesan sukses
+                alert(response.message);
+                location.reload(); // Reload halaman
+            } else {
+                // Jika gagal, tampilkan pesan global jika ada
+                if (response.message) {
+                    $('#global-error').html(response.message).show();
+                }
+            }
+        },
+        error: function (xhr, status, error) {
+            // Jika terjadi kesalahan server
+            alert('Terjadi kesalahan pada server: ' + error);
+        }
+    });
+});
+
+
+
     let currentSection = 0;
     const formSections = document.querySelectorAll('.form-section');
 
@@ -336,7 +387,7 @@
     document.getElementById('nextBtn').addEventListener('click', nextSection);
     document.getElementById('prevBtn').addEventListener('click', prevSection);
 
-    showSection(currentSection); // Initialize the first section
+    showSection(currentSection); 
 </script>
 
 <script src="<?php echo base_url(); ?>public/lib/crud2.js"></script>

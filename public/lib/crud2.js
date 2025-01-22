@@ -37,17 +37,42 @@ $('.saveBtn').on('click', function () {
                 $('#modal_' + target).modal('hide');
                 loadTabel(target);
             } else {
-                
+                // Hapus semua pesan error sebelumnya
                 $('.error-block').text('');
-                
-                
-                $.each(response.error, function (key, val) {
-                    $(`#${key}`).siblings('.error-block').text(val);
-                });
+                $('#global-error').text('').hide();
+
+                // Tampilkan error validasi per field
+                if (response.error) {
+                    $.each(response.error, function (key, val) {
+                        const errorElement = $(`#${key}`).siblings('.error-block');
+                        if (errorElement.length) {
+                            errorElement.text(val);
+                        }
+                    });
+                }
+
+                // Tampilkan pesan error untuk data duplikat
+                if (response.duplicateErrors) {
+                    $.each(response.duplicateErrors, function (key, val) {
+                        const errorElement = $(`#${key}`).siblings('.error-block');
+                        if (errorElement.length) {
+                            errorElement.text(val);
+                        }
+                    });
+                }
+
+                // Tampilkan pesan error global jika ada
+                if (response.message) {
+                    $('#global-error').text(response.message).show();
+                }
             }
+        },
+        error: function (xhr, status, error) {
+            alert('Terjadi kesalahan pada server: ' + error);
         }
     });
 });
+
 
 function loadTabel(target) {
     const table = $(`#table_${target}`);
