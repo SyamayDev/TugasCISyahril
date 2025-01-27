@@ -5,10 +5,59 @@ $(document).ready(function () {
 		let url = baseClass + '/getOption_' + target;
 		$(this).load(url);
 	})
-	$('.table').each(function () {
-		let target = $(this).data('target');
-		loadTabel(target);
-	});
+    $('.table').each(function () {
+        const table = $(this);
+        const target = table.data('target'); 
+        const tableType = table.data('table-type') || 'manual'; 
+        const url = `${baseClass}/table_${target}`; 
+    
+        if (tableType === 'datatable') {
+            
+            table.DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: url, 
+                    type: 'POST', 
+                    dataSrc: function (response) {
+                        if (response.status) {
+                            return response.data; 
+                        } else {
+                            return []; 
+                        }
+                    },
+                    error: function (xhr, error) {
+                        console.error(`Error loading DataTables ${target}:`, error);
+                    }
+                },
+                columns: getColumnsConfig(table), 
+                responsive: true,
+                autoWidth: false,
+                lengthChange: true,
+                pageLength: 10,
+                dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
+                language: {
+                    lengthMenu: "Tampilkan _MENU_ data per halaman",
+                    zeroRecords: "Tidak ada data ditemukan",
+                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
+                    infoEmpty: "Data tidak tersedia",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    search: "Cari:",
+                    paginate: {
+                        first: "Awal",
+                        last: "Akhir",
+                        next: "Berikutnya",
+                        previous: "Sebelumnya"
+                    }
+                }
+            });
+        } else {
+            
+            loadTabel(target);
+        }
+    });
+    
+    
 });
 
 $('.addBtn').on('click', function () {
@@ -49,8 +98,9 @@ $('.saveBtn').on('click', function () {
     });
 });
 
+
 function loadTabel(target) {
-    const table = $(`#table_${target}`);
+    const table = $(`#table_${target}`)
     const url = `${baseClass}/table_${target}`;
 
     $.ajax({
@@ -61,7 +111,7 @@ function loadTabel(target) {
             if (response.status) {
                 generateTable(response.data, table);
             } else {
-                const colSpan = table.find('thead th').length || 1; // Default colSpan jika tidak ada <th>
+                const colSpan = table.find('thead th').length || 1; 
                 const messageRow = `<tr><td colspan="${colSpan}" style="text-align:center;"><h4>${response.message}</h4></td></tr>`;
                 table.find('tbody').html(messageRow);
             }
@@ -81,19 +131,20 @@ function generateTable(data, table) {
             const key = $(this).data('key');
             const style = $(this).attr('style') || '';
             if (key === "no") {
-                // Kolom nomor otomatis
+                
                 row += `<td style="${style}">${index + 1}</td>`;
             } else if (key === "btn_aksi") {
-                // Kolom aksi
+                
                 row += `
-                    <td style="${style}">
-                        <button class="btn btn-primary btn-sm editBtn" data-value="${item.id || ''}">Edit</button>
-                        <button class="btn btn-danger btn-sm deleteBtn" data-value="${item.id || ''}">Delete</button>
-                    </td>`;
+                <td style="${style}">
+                    <button class="btn btn-primary btn-sm editBtn" data-target="${table.data('target')}" data-value="${item.id || ''}">Edit</button>
+                    <button class="btn btn-danger btn-sm deleteBtn" data-target="${table.data('target')}" data-value="${item.id || ''}">Delete</button>
+                </td>`; 
+            
 
             } else {
-                // Data lainnya
-                const value = item[key] || '-'; // Nilai default jika tidak ada
+                
+                const value = item[key] || '-'; 
                 row += `<td style="${style}">${value}</td>`;
             }
         });
@@ -101,7 +152,7 @@ function generateTable(data, table) {
         return row;
     }).join('');
 
-    // Jika data kosong, tambahkan baris informasi
+    
     if (!rows) {
         const colSpan = $thead.length || 1;
         $tbody.html(`<tr><td colspan="${colSpan}" style="text-align:center;">Tidak ada data tersedia</td></tr>`);
@@ -110,11 +161,10 @@ function generateTable(data, table) {
     }
 }
 
-
-
 $(document).on('click', '.editBtn', function () {
 	let target = $(this).data('target');
 	let id = $(this).data('value');
+    console.log('Edit Target:', target, 'ID:', id); 
 	console.log(target);
 	let url = baseClass + '/edit_' + target + '/' + id;
 	let form = '#form_' + target;
@@ -135,11 +185,11 @@ $(document).on('click', '.editBtn', function () {
 	});
 });
 
-
-
 $(document).on('click', '.deleteBtn', function () {
 	let target = $(this).data('target');
 	let id = $(this).data('value');
+    console.log('Delete Target:', target, 'ID:', id); 
+	console.log(target);
 	let url = baseClass + '/delete_' + target + '/' + id;
 	let form = '#form_' + target;
 	$.ajax({
@@ -156,7 +206,6 @@ $(document).on('click', '.deleteBtn', function () {
 		}
 	});
 })
-
     
     $(document).on('hidden.bs.modal', '.modal', function () {
         const $form = $(this).find('form');
@@ -166,4 +215,12 @@ $(document).on('click', '.deleteBtn', function () {
         }
     });
 
-
+    
+        
+    $('.btnRefresh').on('click', function () {
+        const target = $(this).data('target');
+        const table = $(`#table_${target}`).DataTable();
+        const url = `${baseClass}/table_${target}`;
+        table.ajax.reload(null, false); 
+    });
+    

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Masterdata_model extends CI_Model
+class Masterdata_model extends MY_Model
 {
 
 	protected $tableTahunPelajaran = 'data_tahun_pelajaran';
@@ -19,7 +19,40 @@ class Masterdata_model extends CI_Model
 	}
 
 	// CRUD for Tahun Pelajaran
-
+	public function dataTablesTahunPelajaran()
+	{
+		$col_order = array(
+			$this->tableTahunPelajaran . '.id',
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran'
+		);
+		$col_search = array(
+			$this->tableTahunPelajaran . '.id',
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran',
+			$this->tableTahunPelajaran . '.status_tahun_pelajaran'
+		);
+		$order = array($this->tableTahunPelajaran . '.id' => 'desc');
+		$filter = array($this->tableTahunPelajaran . '.deleted_at' => 0);
+		$group_by = null;
+	
+		$this->db->from($this->tableTahunPelajaran);
+		$this->db->select($this->tableTahunPelajaran . '.*');
+		$query = substr($this->db->get_compiled_select(), 6);
+	
+		$data = $this->get_datatables($query, $col_order, $col_search, $order, $filter, $group_by);
+		$recordTotal = $this->countAllQueryFiltered($query, $filter);
+		$recordFiltered = $this->count_filtered($query, $filter);
+	
+		// Format response sebagai JSON
+		$result = array(
+			"draw" => $_POST['draw'] ?? 1,
+			"recordsTotal" => $recordTotal,
+			"recordsFiltered" => $recordFiltered,
+			"data" => $data
+		);
+	
+		return $result; // Kembalikan sebagai array, bukan query object
+	}
+		
 	public function getAllTahunPelajaran()
 	{
 		return  $this->db->get($this->tableTahunPelajaran);
@@ -72,6 +105,52 @@ class Masterdata_model extends CI_Model
 
 
 	// CRUD for Jurusan
+	public function dataTablesJurusan()
+	{
+		$col_order = array(
+			$this->tableJurusan . '.id',
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran',
+			$this->tableJurusan . '.nama_jurusan'
+		);
+		$col_search = array(
+			$this->tableJurusan . '.id',
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran',
+			$this->tableJurusan . '.nama_jurusan',
+		);
+		$order = array($this->tableJurusan . '.id' => 'desc');
+		$filter = array($this->tableJurusan . '.deleted_at' => 0);
+		$group_by = null;
+	
+		// Mulai query untuk Datatables
+		$this->db->from($this->tableJurusan);
+		$this->db->join(
+			$this->tableTahunPelajaran,
+			$this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran',
+			'left'
+		);
+		$this->db->select(
+			$this->tableJurusan . '.*, ' . $this->tableTahunPelajaran . '.nama_tahun_pelajaran'
+		);
+	
+		// Buat query untuk datatables
+		$query = substr($this->db->get_compiled_select(), 6);
+	
+		// Dapatkan data dari method get_datatables
+		$data = $this->get_datatables($query, $col_order, $col_search, $order, $filter, $group_by);
+		$recordTotal = $this->countAllQueryFiltered($query, $filter);
+		$recordFiltered = $this->count_filtered($query, $filter);
+	
+		// Format response sebagai JSON
+		$result = array(
+			"draw" => $_POST['draw'] ?? 1,
+			"recordsTotal" => $recordTotal,
+			"recordsFiltered" => $recordFiltered,
+			"data" => $data
+		);
+	
+		return $result; // Kembalikan sebagai array, bukan query object
+	}
+	
 	public function getAllJurusan()
 	{
 		return $this->db->get($this->tableJurusan);
@@ -128,6 +207,62 @@ class Masterdata_model extends CI_Model
 
 	
 	// CRUD for Kelas
+	public function dataTablesKelas()
+	{
+		$col_order = array(
+			$this->tableKelas . '.id',
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran',
+			$this->tableJurusan . '.nama_jurusan',
+			$this->tableKelas . '.nama_kelas'
+		);
+		$col_search = array(
+			$this->tableKelas . '.id',
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran',
+			$this->tableJurusan . '.nama_jurusan',
+			$this->tableKelas . '.nama_kelas',
+		);
+		$order = array($this->tableKelas . '.id' => 'desc');
+		$filter = array($this->tableKelas . '.deleted_at' => 0);
+		$group_by = null;
+	
+		// Mulai query untuk Datatables
+		$this->db->from($this->tableKelas);
+		$this->db->join(
+			$this->tableJurusan,
+			$this->tableJurusan . '.id = ' . $this->tableKelas . '.id_jurusan',
+			'left'
+		);
+		$this->db->join(
+			$this->tableTahunPelajaran,
+			$this->tableTahunPelajaran . '.id = ' . $this->tableJurusan . '.id_tahun_pelajaran',
+			'left'
+		);
+		$this->db->select(
+			$this->tableKelas . '.*, ' .
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran, ' .
+			$this->tableJurusan . '.nama_jurusan'
+		);
+	
+		// Buat query untuk datatables
+		$query = substr($this->db->get_compiled_select(), 6);
+	
+		// Dapatkan data dari method get_datatables
+		$data = $this->get_datatables($query, $col_order, $col_search, $order, $filter, $group_by);
+		$recordTotal = $this->countAllQueryFiltered($query, $filter);
+		$recordFiltered = $this->count_filtered($query, $filter);
+	
+		// Format response sebagai JSON
+		$result = array(
+			"draw" => $_POST['draw'] ?? 1,
+			"recordsTotal" => $recordTotal,
+			"recordsFiltered" => $recordFiltered,
+			"data" => $data
+		);
+	
+		return $result; // Kembalikan sebagai array, bukan query object
+	}
+	
+	
 	public function getAllKelas()
 	{
 		return $this->db->get($this->tableKelas);
@@ -181,6 +316,41 @@ class Masterdata_model extends CI_Model
 		return $this->db->affected_rows();
 	}
 
+	// CRUD for Jenis Biaya
+	public function dataTablesJenisBiaya()
+	{
+		$col_order = array(
+			$this->tableJenisBiaya . '.id',
+			$this->tableJenisBiaya . '.nama_jenis_biaya',
+		);
+		$col_search = array(
+			$this->tableJenisBiaya . '.id',
+			$this->tableJenisBiaya . '.nama_jenis_biaya',
+			$this->tableJenisBiaya . '.status_jenis_biaya',
+		);
+		$order = array($this->tableJenisBiaya . '.id' => 'desc');
+		$filter = array($this->tableJenisBiaya . '.deleted_at' => 0);
+		$group_by = null;
+	
+		$this->db->from($this->tableJenisBiaya);
+		$this->db->select($this->tableJenisBiaya . '.*');
+		$query = substr($this->db->get_compiled_select(), 6);
+	
+		$data = $this->get_datatables($query, $col_order, $col_search, $order, $filter, $group_by);
+		$recordTotal = $this->countAllQueryFiltered($query, $filter);
+		$recordFiltered = $this->count_filtered($query, $filter);
+	
+		// Format response sebagai JSON
+		$result = array(
+			"draw" => $_POST['draw'] ?? 1,
+			"recordsTotal" => $recordTotal,
+			"recordsFiltered" => $recordFiltered,
+			"data" => $data
+		);
+	
+		return $result; // Kembalikan sebagai array, bukan query object
+	}
+
 	public function saveJenisBiaya($data)
 	{
 		$this->db->insert($this->tableJenisBiaya, $data);
@@ -222,6 +392,64 @@ class Masterdata_model extends CI_Model
 		$this->db->where('status_jenis_biaya', 1);
 		return $this->db->get($this->tableJenisBiaya);
 	}
+
+
+	// CRUD for Harga Biaya
+	public function dataTablesHargaBiaya()
+	{
+		$col_order = array(
+			$this->tableHargaBiaya . '.id',
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran',
+			$this->tableJenisBiaya . '.nama_jenis_biaya',
+			$this->tableHargaBiaya . '.harga_biaya'
+		);
+		$col_search = array(
+			$this->tableHargaBiaya . '.id',
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran',
+			$this->tableJenisBiaya . '.nama_jenis_biaya',
+			$this->tableHargaBiaya . '.harga_biaya',
+		);
+		$order = array($this->tableHargaBiaya . '.id' => 'desc');
+		$filter = array($this->tableHargaBiaya . '.deleted_at' => 0);
+		$group_by = null;
+	
+		// Mulai query untuk Datatables
+		$this->db->from($this->tableHargaBiaya);
+		$this->db->join(
+			$this->tableJenisBiaya,
+			$this->tableJenisBiaya . '.id = ' . $this->tableHargaBiaya . '.jenis_biaya_id',
+			'left'
+		);
+		$this->db->join(
+			$this->tableTahunPelajaran,
+			$this->tableTahunPelajaran . '.id = ' . $this->tableHargaBiaya . '.tahun_pelajaran_id',
+			'left'
+		);
+		$this->db->select(
+			$this->tableHargaBiaya . '.*, ' .
+			$this->tableJenisBiaya . '.nama_jenis_biaya, ' .
+			$this->tableTahunPelajaran . '.nama_tahun_pelajaran'
+		);
+	
+		// Buat query untuk datatables
+		$query = substr($this->db->get_compiled_select(), 6);
+	
+		// Dapatkan data dari method get_datatables
+		$data = $this->get_datatables($query, $col_order, $col_search, $order, $filter, $group_by);
+		$recordTotal = $this->countAllQueryFiltered($query, $filter);
+		$recordFiltered = $this->count_filtered($query, $filter);
+	
+		// Format response sebagai JSON
+		$result = array(
+			"draw" => $_POST['draw'] ?? 1,
+			"recordsTotal" => $recordTotal,
+			"recordsFiltered" => $recordFiltered,
+			"data" => $data
+		);
+	
+		return $result; // Kembalikan sebagai array, bukan query object
+	}
+	
 
 	public function getAllHargaBiaya()
 	{
@@ -273,6 +501,39 @@ class Masterdata_model extends CI_Model
 
 	// CRUD for Jenis Seragam
 
+	public function dataTablesJenisSeragam()
+	{
+		$col_order = array(
+			$this->tableJenisSeragam . '.id',
+			$this->tableJenisSeragam . '.nama_jenis_seragam',
+		);
+		$col_search = array(
+			$this->tableJenisSeragam . '.id',
+			$this->tableJenisSeragam . '.nama_jenis_seragam',
+		);
+		$order = array($this->tableJenisSeragam . '.id' => 'desc');
+		$filter = array($this->tableJenisSeragam . '.deleted_at' => 0);
+		$group_by = null;
+	
+		$this->db->from($this->tableJenisSeragam);
+		$this->db->select($this->tableJenisSeragam . '.*');
+		$query = substr($this->db->get_compiled_select(), 6);
+	
+		$data = $this->get_datatables($query, $col_order, $col_search, $order, $filter, $group_by);
+		$recordTotal = $this->countAllQueryFiltered($query, $filter);
+		$recordFiltered = $this->count_filtered($query, $filter);
+	
+		// Format response sebagai JSON
+		$result = array(
+			"draw" => $_POST['draw'] ?? 1,
+			"recordsTotal" => $recordTotal,
+			"recordsFiltered" => $recordFiltered,
+			"data" => $data
+		);
+	
+		return $result; // Kembalikan sebagai array, bukan query object
+	}
+
 	public function saveJenisSeragam($data)
 	{
 		$this->db->insert($this->tableJenisSeragam, $data);
@@ -311,6 +572,55 @@ class Masterdata_model extends CI_Model
     return $query->num_rows() > 0;
 }
 
+
+	// CRUD for Stok Seragam
+		public function dataTablesStokSeragam()
+		{
+			$col_order = array(
+				$this->tableStokSeragam . '.id',
+				$this->tableJenisSeragam . '.nama_jenis_seragam',
+				$this->tableStokSeragam . '.ukuran_seragam',
+				$this->tableStokSeragam . '.stok_seragam'
+			);
+			$col_search = array(
+				$this->tableStokSeragam . '.id',
+				$this->tableJenisSeragam . '.nama_jenis_seragam',
+				$this->tableStokSeragam . '.ukuran_seragam',
+				$this->tableStokSeragam . '.stok_seragam'
+			);
+			$order = array($this->tableStokSeragam . '.id' => 'desc');
+			$filter = array($this->tableStokSeragam . '.deleted_at' => 0);
+			$group_by = null;
+		
+			// Mulai query untuk Datatables
+			$this->db->from($this->tableStokSeragam);
+			$this->db->join(
+				$this->tableJenisSeragam,
+				$this->tableJenisSeragam . '.id = ' . $this->tableStokSeragam . '.jenis_seragam_id',
+				'left'
+			);
+			$this->db->select(
+				$this->tableStokSeragam . '.*, ' . $this->tableJenisSeragam . '.nama_jenis_seragam'
+			);
+		
+			// Buat query untuk datatables
+			$query = substr($this->db->get_compiled_select(), 6);
+		
+			// Dapatkan data dari method get_datatables
+			$data = $this->get_datatables($query, $col_order, $col_search, $order, $filter, $group_by);
+			$recordTotal = $this->countAllQueryFiltered($query, $filter);
+			$recordFiltered = $this->count_filtered($query, $filter);
+		
+			// Format response sebagai JSON
+			$result = array(
+				"draw" => $_POST['draw'] ?? 1,
+				"recordsTotal" => $recordTotal,
+				"recordsFiltered" => $recordFiltered,
+				"data" => $data
+			);
+		
+			return $result; // Kembalikan sebagai array, bukan query object
+		}
 
 	public function getAllStokSeragam()
 	{

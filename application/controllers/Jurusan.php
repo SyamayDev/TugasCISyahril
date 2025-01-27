@@ -28,21 +28,24 @@ class Jurusan extends CI_Controller
 
 	public function table_jurusan()
 	{
-		$q = $this->md->getAllJurusanNotDeleted();
-		$dt = [];
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$dt[] = $row;
-			}
-
-			$ret['status'] = true;
-			$ret['data'] = $dt;
-			$ret['message'] = '';
+		// Panggil data dari model
+		$result = $this->md->dataTablesJurusan();
+	
+		if (!empty($result['data'])) {
+			$ret = [
+				'status' => true,
+				'data' => $result['data'],
+				'message' => '',
+			];
 		} else {
-			$ret['status'] = false;
-			$ret['data'] = [];
-			$ret['message'] = 'Data tidak tersedia';
+			$ret = [
+				'status' => false,
+				'data' => [],
+				'message' => 'Data tidak tersedia',
+			];
 		}
+	
+		// Output data sebagai JSON
 		echo json_encode($ret);
 	}
 

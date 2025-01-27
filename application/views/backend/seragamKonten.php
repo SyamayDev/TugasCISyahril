@@ -16,6 +16,9 @@
 				<div class="btn btn-primary addBtn mb-1" data-target="jenis_seragam">
 					<i class="fas fa-plus"></i> Tambah
 				</div>
+				<div class="btn btn-secondary btnRefresh mb-2" data-target="jenis_seragam">
+					<i class="fas fa-sync"></i> Refresh
+				</div>
 				<div class="card">
 
 					<table id="table_jenis_seragam" data-target="jenis_seragam" data-value="" class="table table-striped table-bordered mt-2">
@@ -35,6 +38,9 @@
 			<div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
 				<div class="btn btn-primary addBtn mb-1" data-target="stok_seragam">
 					<i class="fas fa-plus"></i> Tambah
+				</div>
+				<div class="btn btn-secondary btnRefresh mb-2" data-target="stok_seragam">
+					<i class="fas fa-sync"></i> Refresh
 				</div>
 				<div class="card">
 

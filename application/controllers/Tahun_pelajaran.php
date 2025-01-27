@@ -30,25 +30,28 @@ class Tahun_pelajaran extends CI_Controller
 
 	public function table_tahun_pelajaran()
 	{
-
-		$q = $this->md->getAllTahunPelajaranNotDeleted();
-		$dt = [];
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$dt[] = $row;
-			}
-
-			$ret['status'] = true;
-			$ret['data'] = $dt;
-			$ret['message'] = '';
+		// Panggil data dari model
+		$result = $this->md->dataTablesTahunPelajaran();
+	
+		if (!empty($result['data'])) {
+			$ret = [
+				'status' => true,
+				'data' => $result['data'],
+				'message' => '',
+			];
 		} else {
-			$ret['status'] = false;
-			$ret['data'] = [];
-			$ret['message'] = 'Data tidak tersedia';
+			$ret = [
+				'status' => false,
+				'data' => [],
+				'message' => 'Data tidak tersedia',
+			];
 		}
-
+	
+		// Output data sebagai JSON
 		echo json_encode($ret);
 	}
+	
+
 
 	public function save_tahun_pelajaran()
 	{
@@ -75,6 +78,7 @@ class Tahun_pelajaran extends CI_Controller
 				'error' => $this->form_validation->error_array()
 			]);
 		} else {
+			$id = $this->input->post('id'); // Ambil ID jika ada (untuk edit)
 			$data = [
 				'nama_tahun_pelajaran' => $this->input->post('nama_tahun_pelajaran'),
 				'tanggal_mulai' => $this->input->post('tanggal_mulai'),
@@ -82,14 +86,23 @@ class Tahun_pelajaran extends CI_Controller
 				'status_tahun_pelajaran' => $this->input->post('status_tahun_pelajaran')
 			];
 	
-			$save = $this->md->saveTahunPelajaran($data);
-			echo json_encode([
-				'status' => $save,
-				'message' => $save ? 'Data berhasil disimpan' : 'Data gagal disimpan'
-			]);
+			if ($id) {
+				// Jika ID ada, lakukan update
+				$update = $this->md->updateTahunPelajaran($id, $data);
+				echo json_encode([
+					'status' => $update,
+					'message' => $update ? 'Data berhasil diperbarui' : 'Data gagal diperbarui'
+				]);
+			} else {
+				// Jika ID tidak ada, lakukan insert
+				$save = $this->md->saveTahunPelajaran($data);
+				echo json_encode([
+					'status' => $save,
+					'message' => $save ? 'Data berhasil disimpan' : 'Data gagal disimpan'
+				]);
+			}
 		}
 	}
-
 	
 	
 	public function valid_date($date)
@@ -146,4 +159,3 @@ class Tahun_pelajaran extends CI_Controller
 		echo json_encode($ret);
 	}
 }
-

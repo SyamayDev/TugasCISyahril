@@ -26,25 +26,39 @@ class Biaya extends CI_Controller
 		$this->load->view('template', $data);
 	}
 
-	public function table_jenis_biaya()
+	public function getOptionJenisBiaya()
 	{
-		$q = $this->md->getAllJenisBiaya();
-		$dt = [];
+		$q = $this->md->getJenisBiayaAktif();
+		$opt = '<option value="">-- Pilih Jenis Biaya --</option>';
 		if ($q->num_rows() > 0) {
 			foreach ($q->result() as $row) {
-				$dt[] = $row;
+				$opt .= '<option value="' . $row->id . '">' . $row->nama_jenis_biaya . '</option>';
 			}
-
-			$ret['status'] = true;
-			$ret['data'] = $dt;
-			$ret['message'] = '';
-		} else {
-			$ret['status'] = false;
-			$ret['data'] = [];
-			$ret['message'] = 'Data tidak tersedia';
 		}
+		echo $opt;
+	}
 
 
+	public function table_jenis_biaya()
+	{
+		// Panggil data dari model
+		$result = $this->md->dataTablesJenisBiaya();
+	
+		if (!empty($result['data'])) {
+			$ret = [
+				'status' => true,
+				'data' => $result['data'],
+				'message' => '',
+			];
+		} else {
+			$ret = [
+				'status' => false,
+				'data' => [],
+				'message' => 'Data tidak tersedia',
+			];
+		}
+	
+		// Output data sebagai JSON
 		echo json_encode($ret);
 	}
 
@@ -138,23 +152,27 @@ class Biaya extends CI_Controller
 
 	public function table_harga_biaya()
 	{
-		$q = $this->md->getAllHargaBiaya();
-		$dt = [];
-		if ($q->num_rows() > 0) {
-			foreach ($q->result() as $row) {
-				$dt[] = $row;
-			}
-
-			$ret['status'] = true;
-			$ret['data'] = $dt;
-			$ret['message'] = '';
+		// Panggil data dari model
+		$result = $this->md->dataTablesHargaBiaya();
+	
+		if (!empty($result['data'])) {
+			$ret = [
+				'status' => true,
+				'data' => $result['data'],
+				'message' => '',
+			];
 		} else {
-			$ret['status'] = false;
-			$ret['data'] = 	$this->db->last_query();
-			$ret['message'] = 'Data tidak tersedia';
+			$ret = [
+				'status' => false,
+				'data' => [],
+				'message' => 'Data tidak tersedia',
+			];
 		}
+	
+		// Output data sebagai JSON
 		echo json_encode($ret);
 	}
+
 
 
 	public function save_harga_biaya()
