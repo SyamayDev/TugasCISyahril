@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 22 Jan 2025 pada 00.29
--- Versi server: 8.0.30
--- Versi PHP: 7.4.33
+-- Generation Time: Jan 28, 2025 at 06:09 AM
+-- Server version: 8.0.30
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `data_jurusan`
+-- Table structure for table `data_jurusan`
 --
 
 CREATE TABLE `data_jurusan` (
@@ -37,21 +37,23 @@ CREATE TABLE `data_jurusan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data untuk tabel `data_jurusan`
+-- Dumping data for table `data_jurusan`
 --
 
 INSERT INTO `data_jurusan` (`id`, `id_tahun_pelajaran`, `nama_jurusan`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(4, 1, 'RPL', '2025-01-14 13:20:31', '2025-01-14 13:20:31', 0),
-(5, 1, 'TKJ', '2025-01-14 13:21:18', '2025-01-14 13:21:18', 0),
-(6, 2, 'RPL', '2025-01-14 13:21:42', '2025-01-14 13:21:42', 0),
-(7, 2, 'TKJ', '2025-01-14 13:38:24', '2025-01-14 13:38:24', 0),
-(8, 1, 'DKV', '2025-01-14 13:50:49', '2025-01-14 13:50:49', 1737362834),
-(9, 9, 'ELEKTRO', '2025-01-20 08:44:02', '2025-01-20 08:44:02', 1737362644);
+(10, 12, 'RPL', '2025-01-26 14:36:09', '2025-01-26 14:36:09', 0),
+(11, 12, 'TKJ', '2025-01-26 14:36:20', '2025-01-26 14:36:20', 0),
+(12, 12, 'DKV', '2025-01-26 14:36:56', '2025-01-26 14:36:56', 0),
+(13, 12, 'AKUTANSI', '2025-01-26 14:39:07', '2025-01-26 14:39:07', 0),
+(14, 12, 'PBS', '2025-01-26 14:39:17', '2025-01-26 14:39:17', 0),
+(15, 13, 'RPL', '2025-01-26 14:39:34', '2025-01-26 14:39:34', 0),
+(16, 13, 'TKJ', '2025-01-26 14:39:43', '2025-01-26 14:39:43', 0),
+(17, 13, 'DKV', '2025-01-26 14:39:56', '2025-01-26 14:39:56', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `data_kelas`
+-- Table structure for table `data_kelas`
 --
 
 CREATE TABLE `data_kelas` (
@@ -64,18 +66,28 @@ CREATE TABLE `data_kelas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data untuk tabel `data_kelas`
+-- Dumping data for table `data_kelas`
 --
 
 INSERT INTO `data_kelas` (`id`, `id_jurusan`, `nama_kelas`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 4, '10 RPL', '2025-01-21 08:17:32', '2025-01-21 08:17:32', 0),
-(2, 7, '10 TKJ', '2025-01-21 19:41:16', '2025-01-21 19:41:16', 0),
-(3, 8, '11 DKV', '2025-01-21 20:39:43', '2025-01-21 20:39:43', 0);
+(4, 10, '10 RPL', '2025-01-26 14:40:39', '2025-01-26 14:40:39', 0),
+(5, 11, '10 TKJ', '2025-01-26 14:54:51', '2025-01-26 14:54:51', 0),
+(6, 12, '10 DKV', '2025-01-26 14:55:15', '2025-01-26 14:55:15', 0),
+(7, 13, '10 AKUTANSI', '2025-01-26 14:58:12', '2025-01-26 14:58:12', 0),
+(8, 14, '10 PBS', '2025-01-26 15:00:04', '2025-01-26 15:00:04', 0),
+(9, 15, '10 RPL', '2025-01-26 15:00:55', '2025-01-26 15:00:55', 0),
+(10, 16, '10 TKJ', '2025-01-26 15:01:23', '2025-01-26 15:01:23', 0),
+(11, 17, '10 DKV', '2025-01-26 15:01:41', '2025-01-26 15:01:41', 0),
+(12, 10, '11 RPL', '2025-01-26 15:02:16', '2025-01-26 15:02:16', 0),
+(13, 11, '11 TKJ', '2025-01-26 15:02:29', '2025-01-26 15:02:29', 0),
+(14, 12, '11 DKV', '2025-01-26 15:02:40', '2025-01-26 15:02:40', 0),
+(15, 13, '11 AKUTANSI', '2025-01-26 15:02:53', '2025-01-26 15:02:53', 0),
+(16, 14, '11 PBS', '2025-01-26 15:03:08', '2025-01-26 15:03:08', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `data_tahun_pelajaran`
+-- Table structure for table `data_tahun_pelajaran`
 --
 
 CREATE TABLE `data_tahun_pelajaran` (
@@ -90,22 +102,18 @@ CREATE TABLE `data_tahun_pelajaran` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data untuk tabel `data_tahun_pelajaran`
+-- Dumping data for table `data_tahun_pelajaran`
 --
 
 INSERT INTO `data_tahun_pelajaran` (`id`, `nama_tahun_pelajaran`, `tanggal_mulai`, `tanggal_akhir`, `status_tahun_pelajaran`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, '2025-2026', '2025-01-01', '2026-01-01', '1', '2025-01-14 11:55:27', '2025-01-14 11:55:27', 0),
-(2, '2026-2027', '2025-01-15', '2025-01-15', '1', '0000-00-00 00:00:00', '2025-01-14 08:14:46', 0),
-(7, '2024-2025', '2025-01-14', '2025-01-14', '1', '2025-01-14 13:37:13', '2025-01-14 13:37:13', 0),
-(8, '2026-2028', '0000-00-00', '0000-00-00', '1', '2025-01-14 13:37:36', '2025-01-14 13:37:36', 1736864511),
-(9, '2050-2090', '2025-01-01', '2025-01-16', '1', '2025-01-20 08:44:17', '2025-01-20 08:44:17', 1737362660),
-(10, '3000-8000', '2025-01-01', '2025-01-23', '1', '0000-00-00 00:00:00', '2025-01-20 17:19:31', 0),
-(11, '2025-2026', '2025-01-01', '2026-01-01', '1', '0000-00-00 00:00:00', '2025-01-20 22:21:20', 1737386490);
+(12, '2025-2026', '2025-01-01', '2026-01-01', '1', '0000-00-00 00:00:00', '2025-01-26 21:24:04', 0),
+(13, '2026-2027', '2026-01-01', '2027-01-01', '0', '0000-00-00 00:00:00', '2025-01-26 21:24:34', 0),
+(14, '2027-2028', '2027-01-01', '2028-01-01', '0', '0000-00-00 00:00:00', '2025-01-26 21:25:28', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `harga_biaya`
+-- Table structure for table `harga_biaya`
 --
 
 CREATE TABLE `harga_biaya` (
@@ -119,17 +127,17 @@ CREATE TABLE `harga_biaya` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data untuk tabel `harga_biaya`
+-- Dumping data for table `harga_biaya`
 --
 
 INSERT INTO `harga_biaya` (`id`, `tahun_pelajaran_id`, `jenis_biaya_id`, `harga_biaya`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(10, 2, 13, 4000000.00, '2025-01-16 16:38:56', '2025-01-20 15:30:11', 1737361811),
-(11, 2, 12, 30000.00, '2025-01-20 08:39:57', '2025-01-20 08:39:57', 0);
+(12, 12, 16, '3600000.00', '2025-01-26 15:31:09', '2025-01-26 15:31:09', 0),
+(13, 12, 17, '460000.00', '2025-01-26 15:31:42', '2025-01-26 15:31:42', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `jenis_biaya`
+-- Table structure for table `jenis_biaya`
 --
 
 CREATE TABLE `jenis_biaya` (
@@ -142,16 +150,18 @@ CREATE TABLE `jenis_biaya` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data untuk tabel `jenis_biaya`
+-- Dumping data for table `jenis_biaya`
 --
 
 INSERT INTO `jenis_biaya` (`id`, `nama_jenis_biaya`, `status_jenis_biaya`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(12, 'SPP', 1, '2025-01-16 05:08:46', '2025-01-20 15:10:56', 0);
+(16, 'Pendaftaran', 1, '2025-01-26 15:06:32', '2025-01-26 15:06:32', 0),
+(17, 'SPP', 1, '2025-01-26 15:06:42', '2025-01-26 15:06:42', 0),
+(18, 'Makan Siang', 0, '2025-01-26 15:07:01', '2025-01-26 15:07:01', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `jenis_seragam`
+-- Table structure for table `jenis_seragam`
 --
 
 CREATE TABLE `jenis_seragam` (
@@ -163,17 +173,18 @@ CREATE TABLE `jenis_seragam` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data untuk tabel `jenis_seragam`
+-- Dumping data for table `jenis_seragam`
 --
 
 INSERT INTO `jenis_seragam` (`id`, `nama_jenis_seragam`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'Seragam Putih Abu-abu', '2025-01-16 08:52:12', '2025-01-16 13:17:15', 0),
-(4, 'Seragam Batik', '2025-01-16 15:54:10', '2025-01-16 15:54:10', 0);
+(4, 'Seragam Batik', '2025-01-16 15:54:10', '2025-01-16 15:54:10', 0),
+(7, 'Seragam Olahraga', '2025-01-26 15:32:41', '2025-01-26 15:32:41', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pendaftaran_awal`
+-- Table structure for table `pendaftaran_awal`
 --
 
 CREATE TABLE `pendaftaran_awal` (
@@ -210,7 +221,7 @@ CREATE TABLE `pendaftaran_awal` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data untuk tabel `pendaftaran_awal`
+-- Dumping data for table `pendaftaran_awal`
 --
 
 INSERT INTO `pendaftaran_awal` (`id`, `id_jurusan`, `id_tahun_pelajaran`, `id_kelas`, `nama_kelas`, `created_at`, `updated_at`, `deleted_at`, `nama_siswa`, `nik`, `agama`, `nisn`, `jenis_kelamin`, `tempat_lahir`, `tanggal_lahir`, `alamat`, `no_telepon`, `email`, `asal_sekolah`, `nama_ayah`, `nama_ibu`, `no_telepon_ayah`, `no_telepon_ibu`, `pekerjaan_ayah`, `pekerjaan_ibu`, `nama_wali`, `no_telepon_wali`, `pekerjaan_wali`, `alamat_wali`, `sumber_informasi`) VALUES
@@ -225,7 +236,7 @@ INSERT INTO `pendaftaran_awal` (`id`, `id_jurusan`, `id_tahun_pelajaran`, `id_ke
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `stok_seragam`
+-- Table structure for table `stok_seragam`
 --
 
 CREATE TABLE `stok_seragam` (
@@ -239,17 +250,17 @@ CREATE TABLE `stok_seragam` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data untuk tabel `stok_seragam`
+-- Dumping data for table `stok_seragam`
 --
 
 INSERT INTO `stok_seragam` (`id`, `jenis_seragam_id`, `ukuran_seragam`, `stok_seragam`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(2, 1, 'M', '120', '2025-01-16 13:16:22', '2025-01-20 08:12:43', 0),
-(3, 1, 'L', '130', '2025-01-16 15:16:18', '2025-01-16 15:16:18', 1737360958);
+(4, 1, 'M', '120', '2025-01-26 15:32:10', '2025-01-26 15:32:10', 0),
+(5, 4, 'M', '100', '2025-01-26 15:32:26', '2025-01-26 15:32:26', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -260,7 +271,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data untuk tabel `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `updated_at`) VALUES
@@ -274,113 +285,113 @@ INSERT INTO `user` (`id`, `username`, `password`, `updated_at`) VALUES
 --
 
 --
--- Indeks untuk tabel `data_jurusan`
+-- Indexes for table `data_jurusan`
 --
 ALTER TABLE `data_jurusan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `data_kelas`
+-- Indexes for table `data_kelas`
 --
 ALTER TABLE `data_kelas`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `data_tahun_pelajaran`
+-- Indexes for table `data_tahun_pelajaran`
 --
 ALTER TABLE `data_tahun_pelajaran`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `harga_biaya`
+-- Indexes for table `harga_biaya`
 --
 ALTER TABLE `harga_biaya`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `jenis_biaya`
+-- Indexes for table `jenis_biaya`
 --
 ALTER TABLE `jenis_biaya`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `jenis_seragam`
+-- Indexes for table `jenis_seragam`
 --
 ALTER TABLE `jenis_seragam`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `pendaftaran_awal`
+-- Indexes for table `pendaftaran_awal`
 --
 ALTER TABLE `pendaftaran_awal`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `stok_seragam`
+-- Indexes for table `stok_seragam`
 --
 ALTER TABLE `stok_seragam`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `data_jurusan`
+-- AUTO_INCREMENT for table `data_jurusan`
 --
 ALTER TABLE `data_jurusan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT untuk tabel `data_kelas`
+-- AUTO_INCREMENT for table `data_kelas`
 --
 ALTER TABLE `data_kelas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT untuk tabel `data_tahun_pelajaran`
+-- AUTO_INCREMENT for table `data_tahun_pelajaran`
 --
 ALTER TABLE `data_tahun_pelajaran`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT untuk tabel `harga_biaya`
+-- AUTO_INCREMENT for table `harga_biaya`
 --
 ALTER TABLE `harga_biaya`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT untuk tabel `jenis_biaya`
+-- AUTO_INCREMENT for table `jenis_biaya`
 --
 ALTER TABLE `jenis_biaya`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT untuk tabel `jenis_seragam`
+-- AUTO_INCREMENT for table `jenis_seragam`
 --
 ALTER TABLE `jenis_seragam`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `pendaftaran_awal`
+-- AUTO_INCREMENT for table `pendaftaran_awal`
 --
 ALTER TABLE `pendaftaran_awal`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
--- AUTO_INCREMENT untuk tabel `stok_seragam`
+-- AUTO_INCREMENT for table `stok_seragam`
 --
 ALTER TABLE `stok_seragam`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT untuk tabel `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
