@@ -5,57 +5,11 @@ $(document).ready(function () {
 		let url = baseClass + '/getOption_' + target;
 		$(this).load(url);
 	})
-    $('.table').each(function () {
-        const table = $(this);
-        const target = table.data('target'); 
-        const tableType = table.data('table-type') || 'manual'; 
-        const url = `${baseClass}/table_${target}`; 
+	$('.table').each(function () {
+		let target = $(this).data('target');
+		loadTabel(target);
+	});
     
-        if (tableType === 'datatable') {
-            
-            table.DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: url, 
-                    type: 'POST', 
-                    dataSrc: function (response) {
-                        if (response.status) {
-                            return response.data; 
-                        } else {
-                            return []; 
-                        }
-                    },
-                    error: function (xhr, error) {
-                        console.error(`Error loading DataTables ${target}:`, error);
-                    }
-                },
-                columns: getColumnsConfig(table), 
-                responsive: true,
-                autoWidth: false,
-                lengthChange: true,
-                pageLength: 10,
-                dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
-                language: {
-                    lengthMenu: "Tampilkan _MENU_ data per halaman",
-                    zeroRecords: "Tidak ada data ditemukan",
-                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
-                    infoEmpty: "Data tidak tersedia",
-                    infoFiltered: "(difilter dari _MAX_ total data)",
-                    search: "Cari:",
-                    paginate: {
-                        first: "Awal",
-                        last: "Akhir",
-                        next: "Berikutnya",
-                        previous: "Sebelumnya"
-                    }
-                }
-            });
-        } else {
-            
-            loadTabel(target);
-        }
-    });
 });
 
 $('.addBtn').on('click', function () {
@@ -122,7 +76,7 @@ $('.saveBtn').on('click', function () {
 
 
 function loadTabel(target) {
-    const table = $(`#table_${target}`);
+    const table = $(`#table_${target}`)
     const url = `${baseClass}/table_${target}`;
 
     $.ajax({
@@ -158,10 +112,10 @@ function generateTable(data, table) {
             } else if (key === "btn_aksi") {
                 
                 row += `
-                <td style="${style}">
-                    <button class="btn btn-primary btn-sm editBtn" data-target="${table.data('target')}" data-value="${item.id || ''}">Edit</button>
-                    <button class="btn btn-danger btn-sm deleteBtn" data-target="${table.data('target')}" data-value="${item.id || ''}">Delete</button>
-                </td>`; 
+                    <td style="${style}">
+                        <button class="btn btn-primary btn-sm editBtn" data-value="${item.id || ''}">Edit</button>
+                        <button class="btn btn-danger btn-sm deleteBtn" data-value="${item.id || ''}">Delete</button>
+                    </td>`;
             
 
             } else {
@@ -182,7 +136,6 @@ function generateTable(data, table) {
         $tbody.html(rows);
     }
 }
-
 
 
 $(document).on('click', '.editBtn', function () {
@@ -242,3 +195,11 @@ $(document).on('click', '.deleteBtn', function () {
     });
 
 
+        
+    $('.btnRefresh').on('click', function () {
+        const target = $(this).data('target');
+        const table = $(`#table_${target}`).DataTable();
+        const url = `${baseClass}/table_${target}`;
+        table.ajax.reload(null, false); 
+    });
+    

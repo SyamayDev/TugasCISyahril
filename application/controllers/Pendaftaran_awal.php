@@ -3,11 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Pendaftaran_awal extends CI_Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-        
-        if (!$this->session->userdata('is_login')) {
+	public function __construct()
+	{
+		parent::__construct();
+		
+		if (!$this->session->userdata('is_login')) {
             redirect('login', 'refresh'); 
         }
 
@@ -17,15 +17,15 @@ class Pendaftaran_awal extends CI_Controller
         $this->load->library('form_validation');
     }
 
-    public function index()
-    {
-        $data = array(
-            'menu' => 'backend/menu',
-            'content' => 'backend/pendaftaranAwalKonten',
-            'title' => 'Admin'
-        );
-        $this->load->view('template', $data);
-    }
+	public function index()
+	{
+		$data = array(
+			'menu' => 'backend/menu',
+			'content' => 'backend/pendaftaranAwalKonten',
+			'title' => 'Admin'
+		);
+		$this->load->view('template', $data);
+	}
 
     public function getOption_tahun_pelajaran()
     {
@@ -33,7 +33,7 @@ class Pendaftaran_awal extends CI_Controller
         $opt = '<option value="">Pilih Tahun Pelajaran</option>';
         if (!empty($q)) { // Memeriksa apakah data tidak kosong
             foreach ($q as $row) {
-                $opt .= '<option value="' . $row->id . '">' . $row->nama_tahun_pelajaran . '</option>';
+                $opt .= '<option value="' . $row['id'] . '">' . $row['nama_tahun_pelajaran'] . '</option>';
             }
         }
         echo $opt;
@@ -51,7 +51,7 @@ class Pendaftaran_awal extends CI_Controller
         $ret = '<option value="">Pilih Jurusan</option>';
         if (!empty($q)) { // Memeriksa apakah data tidak kosong
             foreach ($q as $row) {
-                $ret .= '<option value="' . $row->id . '">' . $row->nama_jurusan . '</option>';
+                $ret .= '<option value="' . $row['id'] . '">' . $row['nama_jurusan'] . '</option>';
             }
         }
         
@@ -65,7 +65,7 @@ class Pendaftaran_awal extends CI_Controller
         $ret = '<option value="">Pilih Kelas</option>';
         if (!empty($q)) { // Memeriksa apakah data tidak kosong
             foreach ($q as $row) {
-                $ret .= '<option value="' . $row->id . '">' . $row->nama_kelas . '</option>';
+                $ret .= '<option value="' . $row['id'] . '">' . $row['nama_kelas'] . '</option>';
             }
         }
         echo $ret;
@@ -73,10 +73,28 @@ class Pendaftaran_awal extends CI_Controller
 
     public function table_pendaftaran_awal_kelas()
     {
-        $q = $this->Pendaftaran_model->dataTablesPendaftaranAwalKelas();
+        $this->db->select('
+            pendaftaran_awal.id,
+            pendaftaran_awal.id_tahun_pelajaran,
+            tahun_pelajaran.nama_tahun_pelajaran,
+            pendaftaran_awal.id_jurusan,
+            jurusan.nama_jurusan,
+            pendaftaran_awal.id_kelas,
+            kelas.nama_kelas
+        ');
+        
+        $this->db->from('pendaftaran_awal');
+        $this->db->join('data_tahun_pelajaran as tahun_pelajaran', 'pendaftaran_awal.id_tahun_pelajaran = tahun_pelajaran.id');
+        $this->db->join('data_jurusan as jurusan', 'pendaftaran_awal.id_jurusan = jurusan.id');
+        $this->db->join('data_kelas as kelas', 'pendaftaran_awal.id_kelas = kelas.id');
+        
+        $this->db->where('pendaftaran_awal.deleted_at', 0);
+    
+        $q = $this->db->get();
+        
         $dt = [];
-        if (!empty($q)) {
-            foreach ($q as $row) {
+        if ($q->num_rows() > 0) {
+            foreach ($q->result() as $row) {
                 $dt[] = [
                     'id' => $row->id,
                     'id_tahun_pelajaran' => $row->id_tahun_pelajaran,
@@ -95,16 +113,17 @@ class Pendaftaran_awal extends CI_Controller
             $ret['data'] = [];
             $ret['message'] = 'Data tidak tersedia';
         }
-
+        
         echo json_encode($ret);
     }
+    
 
     public function table_pendaftaran_awal_siswa()
     {
-        $q = $this->Pendaftaran_model->dataTablesPendaftaranAwalSiswa();
+        $q = $this->Pendaftaran_model->getAllPendaftaranAwalNotDeleted();
         $dt = [];
-        if (!empty($q)) {
-            foreach ($q as $row) {
+        if ($q->num_rows() > 0) {
+            foreach ($q->result() as $row) {
                 $dt[] = [
                     'id' => $row->id,
                     'nama_siswa' => $row->nama_siswa,
@@ -133,10 +152,10 @@ class Pendaftaran_awal extends CI_Controller
 
     public function table_pendaftaran_awal_orangtua()
     {
-        $q = $this->Pendaftaran_model->dataTablesPendaftaranAwalOrangtua();
+        $q = $this->Pendaftaran_model->getAllPendaftaranAwalNotDeleted();
         $dt = [];
-        if (!empty($q)) {
-            foreach ($q as $row) {
+        if ($q->num_rows() > 0) {
+            foreach ($q->result() as $row) {
                 $dt[] = [
                     'id' => $row->id,
                     'nama_ayah' => $row->nama_ayah,
@@ -162,7 +181,6 @@ class Pendaftaran_awal extends CI_Controller
         }
         echo json_encode($ret);
     }
-
 
     public function save_pendaftaran_awal()
     {

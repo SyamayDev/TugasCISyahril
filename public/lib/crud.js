@@ -1,36 +1,39 @@
 $(document).ready(function () {
-	
-	$('.loadSelect').each(function () {
-		let target = $(this).data('target');
-		let url = baseClass + '/getOption_' + target;
-		$(this).load(url);
-	})
+    // Load dropdown options
+    $('.loadSelect').each(function () {
+        let target = $(this).data('target');
+        let url = baseClass + '/getOption_' + target;
+        $(this).load(url);
+    });
+
+    // Initialize DataTables automatically
     $('.table').each(function () {
         const table = $(this);
-        const target = table.data('target'); 
-        const tableType = table.data('table-type') || 'manual'; 
-        const url = `${baseClass}/table_${target}`; 
-    
+        const target = table.data('target');
+        const tableType = table.data('table-type') || 'manual';
+        const url = `${baseClass}/table_${target}`;
+
         if (tableType === 'datatable') {
-            
-            table.DataTable({
+            // Automatically initialize DataTables
+            const dataTableInstance = table.DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: url, 
-                    type: 'POST', 
+                    url: url,
+                    type: 'POST',
                     dataSrc: function (response) {
                         if (response.status) {
-                            return response.data; 
+                            return response.data;
                         } else {
-                            return []; 
+                            console.error('DataTables Error:', response.message);
+                            return [];
                         }
                     },
                     error: function (xhr, error) {
                         console.error(`Error loading DataTables ${target}:`, error);
                     }
                 },
-                columns: getColumnsConfig(table), 
+                columns: getColumnsConfig(table), // Define columns dynamically
                 responsive: true,
                 autoWidth: false,
                 lengthChange: true,
@@ -51,14 +54,28 @@ $(document).ready(function () {
                     }
                 }
             });
+
+            // Save reference for refreshing later
+            table.data('dataTableInstance', dataTableInstance);
         } else {
-            
+            // Manual table loading
             loadTabel(target);
         }
     });
-    
-    
 });
+
+// Function to refresh DataTable
+function refreshDataTable(target) {
+    const table = $(`#table_${target}`);
+    const dataTableInstance = table.data('dataTableInstance');
+
+    if (dataTableInstance) {
+        dataTableInstance.ajax.reload(null, false); // Reload without resetting pagination
+    } else {
+        console.warn(`No DataTable instance found for target: ${target}`);
+    }
+}
+
 
 $('.addBtn').on('click', function () {
 	let target = $(this).data('target');

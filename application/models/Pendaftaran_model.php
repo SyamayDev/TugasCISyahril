@@ -1,119 +1,27 @@
 <?php
-class Pendaftaran_model extends MY_Model
+defined('BASEPATH') or exit('No direct script access allowed');
+class Pendaftaran_model extends CI_Model
 {
-    private $tablePendaftaranAwal = 'pendaftaran_awal';
-    private $tableTahunPelajaran = 'data_tahun_pelajaran';
-    private $tableJurusan = 'data_jurusan';
-    private $tableKelas = 'data_kelas';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	protected $tableTahunPelajaran = 'data_tahun_pelajaran';
+	protected $tableKelas = 'data_kelas';
+	protected $tableJurusan = 'data_jurusan';
+	protected $tableJenisBiaya = 'jenis_biaya';
+	protected $tableHargaBiaya = 'harga_biaya';
+	protected $tableJenisSeragam = 'jenis_seragam';
+	protected $tableStokSeragam = 'stok_seragam';
+    protected $tablePendaftaranAwal = 'pendaftaran_awal';
 
-    private function generateQueryPendaftaranAwalKelas()
-    {
-        $this->db->from($this->tablePendaftaranAwal)
-            ->join($this->tableTahunPelajaran, "{$this->tableTahunPelajaran}.id = {$this->tablePendaftaranAwal}.id_tahun_pelajaran", 'left')
-            ->join($this->tableJurusan, "{$this->tableJurusan}.id = {$this->tablePendaftaranAwal}.id_jurusan", 'left')
-            ->join($this->tableKelas, "{$this->tableKelas}.id = {$this->tablePendaftaranAwal}.id_kelas", 'left')
-            ->select("{$this->tablePendaftaranAwal}.id, {$this->tableTahunPelajaran}.nama_tahun_pelajaran, {$this->tableJurusan}.nama_jurusan, {$this->tableKelas}.nama_kelas");
-
-        return substr($this->db->get_compiled_select(), 6);
-    }
-
-    public function dataTablesPendaftaranAwalKelas()
-    {
-        $col_order = [
-            "{$this->tablePendaftaranAwal}.id",
-            "{$this->tableTahunPelajaran}.nama_tahun_pelajaran",
-            "{$this->tableJurusan}.nama_jurusan",
-            "{$this->tableKelas}.nama_kelas"
-        ];
-        $col_search = $col_order;
-        $order = ["{$this->tablePendaftaranAwal}.id" => 'desc'];
-        $filter = ["{$this->tablePendaftaranAwal}.deleted_at" => 0];
-
-        $query = $this->generateQueryPendaftaranAwalKelas();
-        return $this->buildDatatableResponse($query, $col_order, $col_search, $order, $filter);
-    }
-
-    private function generateQueryPendaftaranAwalSiswa()
-    {
-        $this->db->from($this->tablePendaftaranAwal)
-            ->select('id, nama_siswa, nik, agama, nisn, jenis_kelamin, tempat_lahir, tanggal_lahir, alamat, no_telepon, email, asal_sekolah');
-
-        return substr($this->db->get_compiled_select(), 6);
-    }
-
-    public function dataTablesPendaftaranAwalSiswa()
-    {
-        $col_order = [
-            'id', 'nama_siswa', 'nik', 'agama', 'nisn', 'jenis_kelamin',
-            'tempat_lahir', 'tanggal_lahir', 'alamat', 'no_telepon', 'email', 'asal_sekolah'
-        ];
-        $col_search = $col_order;
-        $order = ['id' => 'desc'];
-        $filter = ['deleted_at' => 0];
-
-        $query = $this->generateQueryPendaftaranAwalSiswa();
-        return $this->buildDatatableResponse($query, $col_order, $col_search, $order, $filter);
-    }
-
-    private function generateQueryPendaftaranAwalOrangtua()
-    {
-        $this->db->from($this->tablePendaftaranAwal)
-            ->select('id, nama_ayah, nama_ibu, no_telepon_ayah, no_telepon_ibu, pekerjaan_ayah, pekerjaan_ibu, nama_wali, no_telepon_wali, pekerjaan_wali, alamat, sumber_informasi');
-
-        return substr($this->db->get_compiled_select(), 6);
-    }
-
-    public function dataTablesPendaftaranAwalOrangtua()
-    {
-        $col_order = [
-            'id', 'nama_ayah', 'nama_ibu', 'no_telepon_ayah', 'no_telepon_ibu',
-            'pekerjaan_ayah', 'pekerjaan_ibu', 'nama_wali', 'no_telepon_wali',
-            'pekerjaan_wali', 'alamat', 'sumber_informasi'
-        ];
-        $col_search = $col_order;
-        $order = ['id' => 'desc'];
-        $filter = ['deleted_at' => 0];
-
-        $query = $this->generateQueryPendaftaranAwalOrangtua();
-        return $this->buildDatatableResponse($query, $col_order, $col_search, $order, $filter);
-    }
-
-    // Menambahkan method buildDatatableResponse() untuk mengatasi error
-    public function buildDatatableResponse($query, $col_order, $col_search, $order, $filter)
-    {
-        $list = $this->get_datatables($query, $col_order, $col_search, $order, $filter);
-
-        $data = [];
-        $no = $_POST['start'];
-        foreach ($list as $item) {
-            $no++;
-            $row = [];
-            foreach ($col_order as $col) {
-                $row[] = $item->$col;
-            }
-            $data[] = $row;
-        }
-
-        $output = [
-            "draw" => $_POST['draw'],
-            "recordsTotal" => $this->countAllQueryFiltered($query, $filter),
-            "recordsFiltered" => $this->count_filtered($query, $filter),
-            "data" => $data,
-        ];
-
-        return $output;
-    }
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
     public function getAllTahunPelajaranNotDeleted()
     {
-        $this->db->select('id, nama_tahun_pelajaran')
-            ->where('deleted_at', 0);
-        return $this->db->get($this->tableTahunPelajaran)->result();
+        $this->db->select('id, nama_tahun_pelajaran'); // Menambahkan kolom nama_tahun_pelajaran
+        $this->db->where('deleted_at', 0);
+        return $this->db->get($this->tableTahunPelajaran)->result_array();
     }
 
     public function getJurusanByTahunPelajaranID($id)
